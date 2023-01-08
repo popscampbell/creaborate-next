@@ -3,6 +3,7 @@ import {
   ButtonGroup,
   Flex,
   SwitchField,
+  TextAreaField,
   TextField
 } from "@aws-amplify/ui-react"
 import { UserProfile, UserProfileVisibility } from "../src/models"
@@ -16,12 +17,17 @@ export default function UserProfileForm(props: { userProfile: UserProfile }) {
     userProfile.visibility as UserProfileVisibility
   )
   const [name, setName] = React.useState(userProfile.name)
+  const [tagline, setTagline] = React.useState(userProfile.tagline)
+  const [about, setAbout] = React.useState(userProfile.about)
 
   function handleSave() {
     DataStore.save(userProfile.id
       ? UserProfile.copyOf(userProfile, copy => {
         copy.visibility = visibility
         copy.name = name
+        copy.searchName = name.toLowerCase()
+        copy.tagline = tagline
+        copy.about = about
       })
       : userProfile
       ).then(() => alert("Saved"))
@@ -47,6 +53,21 @@ export default function UserProfileForm(props: { userProfile: UserProfile }) {
           maxWidth={300}
           isRequired
           onChange={(event) => setName(event.target.value)}
+        />
+      </Flex>
+      <Flex wrap="wrap">
+        <TextField
+          label="Tagline"
+          value={tagline || ""}
+          maxWidth={300}
+          onChange={(event) => setTagline(event.target.value)}
+        />
+      </Flex>
+      <Flex wrap="wrap">
+        <TextAreaField
+          label="About"
+          value={about || ""}
+          onChange={(event) => setAbout(event.target.value)}
         />
       </Flex>
 

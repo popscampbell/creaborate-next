@@ -10,6 +10,15 @@ export const getUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -78,6 +87,15 @@ export const listUserProfiles = /* GraphQL */ `
         visibility
         name
         searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
         tagline
         about
         interests {
@@ -122,6 +140,15 @@ export const syncUserProfiles = /* GraphQL */ `
         visibility
         name
         searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
         tagline
         about
         interests {
@@ -135,6 +162,94 @@ export const syncUserProfiles = /* GraphQL */ `
         notifications {
           nextToken
           startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getUserImage = /* GraphQL */ `
+  query GetUserImage($id: ID!) {
+    getUserImage(id: $id) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listUserImages = /* GraphQL */ `
+  query ListUserImages(
+    $filter: ModelUserImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userProfileId
+        image {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncUserImages = /* GraphQL */ `
+  query SyncUserImages(
+    $filter: ModelUserImageFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUserImages(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userProfileId
+        image {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
         }
         createdAt
         updatedAt
@@ -540,6 +655,509 @@ export const syncUserNotifications = /* GraphQL */ `
     }
   }
 `;
+export const getTeam = /* GraphQL */ `
+  query GetTeam($id: ID!) {
+    getTeam(id: $id) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listTeams = /* GraphQL */ `
+  query ListTeams(
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncTeams = /* GraphQL */ `
+  query SyncTeams(
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncTeams(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getTeamMember = /* GraphQL */ `
+  query GetTeamMember($id: ID!) {
+    getTeamMember(id: $id) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const listTeamMembers = /* GraphQL */ `
+  query ListTeamMembers(
+    $filter: ModelTeamMemberFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeamMembers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        teamId
+        userProfile {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        role
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamMemberUserProfileId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncTeamMembers = /* GraphQL */ `
+  query SyncTeamMembers(
+    $filter: ModelTeamMemberFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncTeamMembers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        teamId
+        userProfile {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        role
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamMemberUserProfileId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getTeamInvitation = /* GraphQL */ `
+  query GetTeamInvitation($id: ID!) {
+    getTeamInvitation(id: $id) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
+    }
+  }
+`;
+export const listTeamInvitations = /* GraphQL */ `
+  query ListTeamInvitations(
+    $filter: ModelTeamInvitationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeamInvitations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        teamId
+        role
+        status
+        userProfile {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        externalEmail
+        invitedByUser {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        responseDateTime
+        responseComment
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamInvitationUserProfileId
+        teamInvitationInvitedByUserId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncTeamInvitations = /* GraphQL */ `
+  query SyncTeamInvitations(
+    $filter: ModelTeamInvitationFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncTeamInvitations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        teamId
+        role
+        status
+        userProfile {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        externalEmail
+        invitedByUser {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        responseDateTime
+        responseComment
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamInvitationUserProfileId
+        teamInvitationInvitedByUserId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const userImagesByUserProfileId = /* GraphQL */ `
+  query UserImagesByUserProfileId(
+    $userProfileId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userImagesByUserProfileId(
+      userProfileId: $userProfileId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userProfileId
+        image {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const userSkillsByUserProfileId = /* GraphQL */ `
   query UserSkillsByUserProfileId(
     $userProfileId: ID!
@@ -647,6 +1265,115 @@ export const userNotificationsByUserProfileId = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const teamMembersByTeamId = /* GraphQL */ `
+  query TeamMembersByTeamId(
+    $teamId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTeamMemberFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    teamMembersByTeamId(
+      teamId: $teamId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        teamId
+        userProfile {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        role
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamMemberUserProfileId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const teamInvitationsByTeamId = /* GraphQL */ `
+  query TeamInvitationsByTeamId(
+    $teamId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTeamInvitationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    teamInvitationsByTeamId(
+      teamId: $teamId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        teamId
+        role
+        status
+        userProfile {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        externalEmail
+        invitedByUser {
+          id
+          userId
+          visibility
+          name
+          searchName
+          tagline
+          about
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        responseDateTime
+        responseComment
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamInvitationUserProfileId
+        teamInvitationInvitedByUserId
       }
       nextToken
       startedAt

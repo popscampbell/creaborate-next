@@ -8,14 +8,15 @@ export default function useNewOrExistingUserProfile() {
   React.useEffect(() => {
     Auth.currentAuthenticatedUser().then((user) =>
       DataStore.query(UserProfile, (profile) =>
-        profile.userId.eq(user.username)
+        profile.username.eq(user.username)
       )
         .then((results) =>
           results?.length
             ? results[0]
             : new UserProfile({
-              userId: user.username,
+              username: user.username,
               name: "",
+              searchName: "",
               visibility: UserProfileVisibility.PUBLIC,
             })
         )

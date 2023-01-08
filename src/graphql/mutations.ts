@@ -13,6 +13,15 @@ export const createUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -79,6 +88,15 @@ export const updateUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -145,6 +163,15 @@ export const deleteUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -191,6 +218,81 @@ export const deleteUserProfile = /* GraphQL */ `
         }
         nextToken
         startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createUserImage = /* GraphQL */ `
+  mutation CreateUserImage(
+    $input: CreateUserImageInput!
+    $condition: ModelUserImageConditionInput
+  ) {
+    createUserImage(input: $input, condition: $condition) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateUserImage = /* GraphQL */ `
+  mutation UpdateUserImage(
+    $input: UpdateUserImageInput!
+    $condition: ModelUserImageConditionInput
+  ) {
+    updateUserImage(input: $input, condition: $condition) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteUserImage = /* GraphQL */ `
+  mutation DeleteUserImage(
+    $input: DeleteUserImageInput!
+    $condition: ModelUserImageConditionInput
+  ) {
+    deleteUserImage(input: $input, condition: $condition) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
       }
       createdAt
       updatedAt
@@ -521,6 +623,612 @@ export const deleteUserNotification = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+    }
+  }
+`;
+export const createTeam = /* GraphQL */ `
+  mutation CreateTeam(
+    $input: CreateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    createTeam(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeam = /* GraphQL */ `
+  mutation UpdateTeam(
+    $input: UpdateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    updateTeam(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeam = /* GraphQL */ `
+  mutation DeleteTeam(
+    $input: DeleteTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    deleteTeam(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamMember = /* GraphQL */ `
+  mutation CreateTeamMember(
+    $input: CreateTeamMemberInput!
+    $condition: ModelTeamMemberConditionInput
+  ) {
+    createTeamMember(input: $input, condition: $condition) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const updateTeamMember = /* GraphQL */ `
+  mutation UpdateTeamMember(
+    $input: UpdateTeamMemberInput!
+    $condition: ModelTeamMemberConditionInput
+  ) {
+    updateTeamMember(input: $input, condition: $condition) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const deleteTeamMember = /* GraphQL */ `
+  mutation DeleteTeamMember(
+    $input: DeleteTeamMemberInput!
+    $condition: ModelTeamMemberConditionInput
+  ) {
+    deleteTeamMember(input: $input, condition: $condition) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const createTeamInvitation = /* GraphQL */ `
+  mutation CreateTeamInvitation(
+    $input: CreateTeamInvitationInput!
+    $condition: ModelTeamInvitationConditionInput
+  ) {
+    createTeamInvitation(input: $input, condition: $condition) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
+    }
+  }
+`;
+export const updateTeamInvitation = /* GraphQL */ `
+  mutation UpdateTeamInvitation(
+    $input: UpdateTeamInvitationInput!
+    $condition: ModelTeamInvitationConditionInput
+  ) {
+    updateTeamInvitation(input: $input, condition: $condition) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
+    }
+  }
+`;
+export const deleteTeamInvitation = /* GraphQL */ `
+  mutation DeleteTeamInvitation(
+    $input: DeleteTeamInvitationInput!
+    $condition: ModelTeamInvitationConditionInput
+  ) {
+    deleteTeamInvitation(input: $input, condition: $condition) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
     }
   }
 `;

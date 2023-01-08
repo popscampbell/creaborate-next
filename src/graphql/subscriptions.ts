@@ -12,6 +12,15 @@ export const onCreateUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -77,6 +86,15 @@ export const onUpdateUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -142,6 +160,15 @@ export const onDeleteUserProfile = /* GraphQL */ `
       visibility
       name
       searchName
+      profileImage {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
       tagline
       about
       interests {
@@ -188,6 +215,78 @@ export const onDeleteUserProfile = /* GraphQL */ `
         }
         nextToken
         startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateUserImage = /* GraphQL */ `
+  subscription OnCreateUserImage(
+    $filter: ModelSubscriptionUserImageFilterInput
+  ) {
+    onCreateUserImage(filter: $filter) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateUserImage = /* GraphQL */ `
+  subscription OnUpdateUserImage(
+    $filter: ModelSubscriptionUserImageFilterInput
+  ) {
+    onUpdateUserImage(filter: $filter) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteUserImage = /* GraphQL */ `
+  subscription OnDeleteUserImage(
+    $filter: ModelSubscriptionUserImageFilterInput
+  ) {
+    onDeleteUserImage(filter: $filter) {
+      id
+      userProfileId
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
       }
       createdAt
       updatedAt
@@ -491,6 +590,597 @@ export const onDeleteUserNotification = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+    }
+  }
+`;
+export const onCreateTeam = /* GraphQL */ `
+  subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onCreateTeam(filter: $filter) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateTeam = /* GraphQL */ `
+  subscription OnUpdateTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onUpdateTeam(filter: $filter) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteTeam = /* GraphQL */ `
+  subscription OnDeleteTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onDeleteTeam(filter: $filter) {
+      id
+      name
+      searchName
+      visibility
+      teamType
+      customTeamType
+      description
+      teamMembers {
+        items {
+          id
+          teamId
+          role
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamMemberUserProfileId
+        }
+        nextToken
+        startedAt
+      }
+      invitations {
+        items {
+          id
+          teamId
+          role
+          status
+          externalEmail
+          responseDateTime
+          responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamInvitationUserProfileId
+          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateTeamMember = /* GraphQL */ `
+  subscription OnCreateTeamMember(
+    $filter: ModelSubscriptionTeamMemberFilterInput
+  ) {
+    onCreateTeamMember(filter: $filter) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const onUpdateTeamMember = /* GraphQL */ `
+  subscription OnUpdateTeamMember(
+    $filter: ModelSubscriptionTeamMemberFilterInput
+  ) {
+    onUpdateTeamMember(filter: $filter) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const onDeleteTeamMember = /* GraphQL */ `
+  subscription OnDeleteTeamMember(
+    $filter: ModelSubscriptionTeamMemberFilterInput
+  ) {
+    onDeleteTeamMember(filter: $filter) {
+      id
+      teamId
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      role
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamMemberUserProfileId
+    }
+  }
+`;
+export const onCreateTeamInvitation = /* GraphQL */ `
+  subscription OnCreateTeamInvitation(
+    $filter: ModelSubscriptionTeamInvitationFilterInput
+  ) {
+    onCreateTeamInvitation(filter: $filter) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
+    }
+  }
+`;
+export const onUpdateTeamInvitation = /* GraphQL */ `
+  subscription OnUpdateTeamInvitation(
+    $filter: ModelSubscriptionTeamInvitationFilterInput
+  ) {
+    onUpdateTeamInvitation(filter: $filter) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
+    }
+  }
+`;
+export const onDeleteTeamInvitation = /* GraphQL */ `
+  subscription OnDeleteTeamInvitation(
+    $filter: ModelSubscriptionTeamInvitationFilterInput
+  ) {
+    onDeleteTeamInvitation(filter: $filter) {
+      id
+      teamId
+      role
+      status
+      userProfile {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      externalEmail
+      invitedByUser {
+        id
+        userId
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        interests {
+          nextToken
+          startedAt
+        }
+        skills {
+          nextToken
+          startedAt
+        }
+        notifications {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      responseDateTime
+      responseComment
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamInvitationUserProfileId
+      teamInvitationInvitedByUserId
     }
   }
 `;

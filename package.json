@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "push": "amplify push --yes --allow-destructive-graphql-schema-updates",
+    "pull": "amplify pull"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^4.3.2",

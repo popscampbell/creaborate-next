@@ -8,6 +8,7 @@ export type CreateUserProfileInput = {
   visibility: UserProfileVisibility,
   name: string,
   searchName: string,
+  profileImage?: ImageInput | null,
   tagline?: string | null,
   about?: string | null,
   _version?: number | null,
@@ -19,6 +20,16 @@ export enum UserProfileVisibility {
   ARCHIVED = "ARCHIVED",
 }
 
+
+export type ImageInput = {
+  storageKey: string,
+  alt: string,
+  searchAlt: string,
+  caption?: string | null,
+  searchCaption?: string | null,
+  detail?: string | null,
+  searchDetail?: string | null,
+};
 
 export type ModelUserProfileConditionInput = {
   userId?: ModelIDInput | null,
@@ -100,6 +111,7 @@ export type UserProfile = {
   visibility: UserProfileVisibility,
   name: string,
   searchName: string,
+  profileImage?: Image | null,
   tagline?: string | null,
   about?: string | null,
   interests?: ModelUserInterestConnection | null,
@@ -110,6 +122,17 @@ export type UserProfile = {
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
+};
+
+export type Image = {
+  __typename: "Image",
+  storageKey: string,
+  alt: string,
+  searchAlt: string,
+  caption?: string | null,
+  searchCaption?: string | null,
+  detail?: string | null,
+  searchDetail?: string | null,
 };
 
 export type ModelUserInterestConnection = {
@@ -213,12 +236,51 @@ export type UpdateUserProfileInput = {
   visibility?: UserProfileVisibility | null,
   name?: string | null,
   searchName?: string | null,
+  profileImage?: ImageInput | null,
   tagline?: string | null,
   about?: string | null,
   _version?: number | null,
 };
 
 export type DeleteUserProfileInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateUserImageInput = {
+  id?: string | null,
+  userProfileId: string,
+  image: ImageInput,
+  _version?: number | null,
+};
+
+export type ModelUserImageConditionInput = {
+  userProfileId?: ModelIDInput | null,
+  and?: Array< ModelUserImageConditionInput | null > | null,
+  or?: Array< ModelUserImageConditionInput | null > | null,
+  not?: ModelUserImageConditionInput | null,
+};
+
+export type UserImage = {
+  __typename: "UserImage",
+  id: string,
+  userProfileId: string,
+  image: Image,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateUserImageInput = {
+  id: string,
+  userProfileId?: string | null,
+  image?: ImageInput | null,
+  _version?: number | null,
+};
+
+export type DeleteUserImageInput = {
   id: string,
   _version?: number | null,
 };
@@ -372,6 +434,235 @@ export type DeleteUserNotificationInput = {
   _version?: number | null,
 };
 
+export type CreateTeamInput = {
+  id?: string | null,
+  name: string,
+  searchName: string,
+  visibility: TeamVisibility,
+  teamType: TeamType,
+  customTeamType?: string | null,
+  description: string,
+  _version?: number | null,
+};
+
+export enum TeamVisibility {
+  PRIVATE = "PRIVATE",
+  PUBLIC = "PUBLIC",
+  ARCHIVED = "ARCHIVED",
+}
+
+
+export enum TeamType {
+  TEAM = "TEAM",
+  BAND = "BAND",
+  GROUP = "GROUP",
+  CUSTOM = "CUSTOM",
+}
+
+
+export type ModelTeamConditionInput = {
+  name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  visibility?: ModelTeamVisibilityInput | null,
+  teamType?: ModelTeamTypeInput | null,
+  customTeamType?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  and?: Array< ModelTeamConditionInput | null > | null,
+  or?: Array< ModelTeamConditionInput | null > | null,
+  not?: ModelTeamConditionInput | null,
+};
+
+export type ModelTeamVisibilityInput = {
+  eq?: TeamVisibility | null,
+  ne?: TeamVisibility | null,
+};
+
+export type ModelTeamTypeInput = {
+  eq?: TeamType | null,
+  ne?: TeamType | null,
+};
+
+export type Team = {
+  __typename: "Team",
+  id: string,
+  name: string,
+  searchName: string,
+  visibility: TeamVisibility,
+  teamType: TeamType,
+  customTeamType?: string | null,
+  description: string,
+  teamMembers?: ModelTeamMemberConnection | null,
+  invitations?: ModelTeamInvitationConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type ModelTeamMemberConnection = {
+  __typename: "ModelTeamMemberConnection",
+  items:  Array<TeamMember | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type TeamMember = {
+  __typename: "TeamMember",
+  id: string,
+  teamId: string,
+  userProfile: UserProfile,
+  role: TeamMemberRole,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  teamMemberUserProfileId: string,
+};
+
+export enum TeamMemberRole {
+  ADMINISTRATOR = "ADMINISTRATOR",
+  MEMBER = "MEMBER",
+}
+
+
+export type ModelTeamInvitationConnection = {
+  __typename: "ModelTeamInvitationConnection",
+  items:  Array<TeamInvitation | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type TeamInvitation = {
+  __typename: "TeamInvitation",
+  id: string,
+  teamId: string,
+  role: TeamMemberRole,
+  status: TeamInvitationStatus,
+  userProfile?: UserProfile | null,
+  externalEmail?: string | null,
+  invitedByUser: UserProfile,
+  responseDateTime?: string | null,
+  responseComment?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  teamInvitationUserProfileId?: string | null,
+  teamInvitationInvitedByUserId: string,
+};
+
+export enum TeamInvitationStatus {
+  SENT = "SENT",
+  ACCEPTED = "ACCEPTED",
+  DECLINED = "DECLINED",
+  EXPIRED = "EXPIRED",
+}
+
+
+export type UpdateTeamInput = {
+  id: string,
+  name?: string | null,
+  searchName?: string | null,
+  visibility?: TeamVisibility | null,
+  teamType?: TeamType | null,
+  customTeamType?: string | null,
+  description?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteTeamInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateTeamMemberInput = {
+  id?: string | null,
+  teamId: string,
+  role: TeamMemberRole,
+  _version?: number | null,
+  teamMemberUserProfileId: string,
+};
+
+export type ModelTeamMemberConditionInput = {
+  teamId?: ModelIDInput | null,
+  role?: ModelTeamMemberRoleInput | null,
+  and?: Array< ModelTeamMemberConditionInput | null > | null,
+  or?: Array< ModelTeamMemberConditionInput | null > | null,
+  not?: ModelTeamMemberConditionInput | null,
+  teamMemberUserProfileId?: ModelIDInput | null,
+};
+
+export type ModelTeamMemberRoleInput = {
+  eq?: TeamMemberRole | null,
+  ne?: TeamMemberRole | null,
+};
+
+export type UpdateTeamMemberInput = {
+  id: string,
+  teamId?: string | null,
+  role?: TeamMemberRole | null,
+  _version?: number | null,
+  teamMemberUserProfileId?: string | null,
+};
+
+export type DeleteTeamMemberInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateTeamInvitationInput = {
+  id?: string | null,
+  teamId: string,
+  role: TeamMemberRole,
+  status: TeamInvitationStatus,
+  externalEmail?: string | null,
+  responseDateTime?: string | null,
+  responseComment?: string | null,
+  _version?: number | null,
+  teamInvitationUserProfileId?: string | null,
+  teamInvitationInvitedByUserId: string,
+};
+
+export type ModelTeamInvitationConditionInput = {
+  teamId?: ModelIDInput | null,
+  role?: ModelTeamMemberRoleInput | null,
+  status?: ModelTeamInvitationStatusInput | null,
+  externalEmail?: ModelStringInput | null,
+  responseDateTime?: ModelStringInput | null,
+  responseComment?: ModelStringInput | null,
+  and?: Array< ModelTeamInvitationConditionInput | null > | null,
+  or?: Array< ModelTeamInvitationConditionInput | null > | null,
+  not?: ModelTeamInvitationConditionInput | null,
+  teamInvitationUserProfileId?: ModelIDInput | null,
+  teamInvitationInvitedByUserId?: ModelIDInput | null,
+};
+
+export type ModelTeamInvitationStatusInput = {
+  eq?: TeamInvitationStatus | null,
+  ne?: TeamInvitationStatus | null,
+};
+
+export type UpdateTeamInvitationInput = {
+  id: string,
+  teamId?: string | null,
+  role?: TeamMemberRole | null,
+  status?: TeamInvitationStatus | null,
+  externalEmail?: string | null,
+  responseDateTime?: string | null,
+  responseComment?: string | null,
+  _version?: number | null,
+  teamInvitationUserProfileId?: string | null,
+  teamInvitationInvitedByUserId?: string | null,
+};
+
+export type DeleteTeamInvitationInput = {
+  id: string,
+  _version?: number | null,
+};
+
 export type ModelUserProfileFilterInput = {
   id?: ModelIDInput | null,
   userId?: ModelIDInput | null,
@@ -388,6 +679,21 @@ export type ModelUserProfileFilterInput = {
 export type ModelUserProfileConnection = {
   __typename: "ModelUserProfileConnection",
   items:  Array<UserProfile | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelUserImageFilterInput = {
+  id?: ModelIDInput | null,
+  userProfileId?: ModelIDInput | null,
+  and?: Array< ModelUserImageFilterInput | null > | null,
+  or?: Array< ModelUserImageFilterInput | null > | null,
+  not?: ModelUserImageFilterInput | null,
+};
+
+export type ModelUserImageConnection = {
+  __typename: "ModelUserImageConnection",
+  items:  Array<UserImage | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -454,6 +760,51 @@ export type ModelUserNotificationFilterInput = {
   not?: ModelUserNotificationFilterInput | null,
 };
 
+export type ModelTeamFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  visibility?: ModelTeamVisibilityInput | null,
+  teamType?: ModelTeamTypeInput | null,
+  customTeamType?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  and?: Array< ModelTeamFilterInput | null > | null,
+  or?: Array< ModelTeamFilterInput | null > | null,
+  not?: ModelTeamFilterInput | null,
+};
+
+export type ModelTeamConnection = {
+  __typename: "ModelTeamConnection",
+  items:  Array<Team | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelTeamMemberFilterInput = {
+  id?: ModelIDInput | null,
+  teamId?: ModelIDInput | null,
+  role?: ModelTeamMemberRoleInput | null,
+  and?: Array< ModelTeamMemberFilterInput | null > | null,
+  or?: Array< ModelTeamMemberFilterInput | null > | null,
+  not?: ModelTeamMemberFilterInput | null,
+  teamMemberUserProfileId?: ModelIDInput | null,
+};
+
+export type ModelTeamInvitationFilterInput = {
+  id?: ModelIDInput | null,
+  teamId?: ModelIDInput | null,
+  role?: ModelTeamMemberRoleInput | null,
+  status?: ModelTeamInvitationStatusInput | null,
+  externalEmail?: ModelStringInput | null,
+  responseDateTime?: ModelStringInput | null,
+  responseComment?: ModelStringInput | null,
+  and?: Array< ModelTeamInvitationFilterInput | null > | null,
+  or?: Array< ModelTeamInvitationFilterInput | null > | null,
+  not?: ModelTeamInvitationFilterInput | null,
+  teamInvitationUserProfileId?: ModelIDInput | null,
+  teamInvitationInvitedByUserId?: ModelIDInput | null,
+};
+
 export enum ModelSortDirection {
   ASC = "ASC",
   DESC = "DESC",
@@ -502,6 +853,13 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionUserImageFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userProfileId?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionUserImageFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserImageFilterInput | null > | null,
+};
+
 export type ModelSubscriptionUserSkillFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   userProfileId?: ModelSubscriptionIDInput | null,
@@ -543,6 +901,38 @@ export type ModelSubscriptionUserNotificationFilterInput = {
   or?: Array< ModelSubscriptionUserNotificationFilterInput | null > | null,
 };
 
+export type ModelSubscriptionTeamFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  searchName?: ModelSubscriptionStringInput | null,
+  visibility?: ModelSubscriptionStringInput | null,
+  teamType?: ModelSubscriptionStringInput | null,
+  customTeamType?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTeamFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTeamFilterInput | null > | null,
+};
+
+export type ModelSubscriptionTeamMemberFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  teamId?: ModelSubscriptionIDInput | null,
+  role?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTeamMemberFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTeamMemberFilterInput | null > | null,
+};
+
+export type ModelSubscriptionTeamInvitationFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  teamId?: ModelSubscriptionIDInput | null,
+  role?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  externalEmail?: ModelSubscriptionStringInput | null,
+  responseDateTime?: ModelSubscriptionStringInput | null,
+  responseComment?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTeamInvitationFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTeamInvitationFilterInput | null > | null,
+};
+
 export type CreateUserProfileMutationVariables = {
   input: CreateUserProfileInput,
   condition?: ModelUserProfileConditionInput | null,
@@ -556,6 +946,16 @@ export type CreateUserProfileMutation = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -630,6 +1030,16 @@ export type UpdateUserProfileMutation = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -704,6 +1114,16 @@ export type DeleteUserProfileMutation = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -757,6 +1177,90 @@ export type DeleteUserProfileMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateUserImageMutationVariables = {
+  input: CreateUserImageInput,
+  condition?: ModelUserImageConditionInput | null,
+};
+
+export type CreateUserImageMutation = {
+  createUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateUserImageMutationVariables = {
+  input: UpdateUserImageInput,
+  condition?: ModelUserImageConditionInput | null,
+};
+
+export type UpdateUserImageMutation = {
+  updateUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteUserImageMutationVariables = {
+  input: DeleteUserImageInput,
+  condition?: ModelUserImageConditionInput | null,
+};
+
+export type DeleteUserImageMutation = {
+  deleteUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1125,6 +1629,687 @@ export type DeleteUserNotificationMutation = {
   } | null,
 };
 
+export type CreateTeamMutationVariables = {
+  input: CreateTeamInput,
+  condition?: ModelTeamConditionInput | null,
+};
+
+export type CreateTeamMutation = {
+  createTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateTeamMutationVariables = {
+  input: UpdateTeamInput,
+  condition?: ModelTeamConditionInput | null,
+};
+
+export type UpdateTeamMutation = {
+  updateTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteTeamMutationVariables = {
+  input: DeleteTeamInput,
+  condition?: ModelTeamConditionInput | null,
+};
+
+export type DeleteTeamMutation = {
+  deleteTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateTeamMemberMutationVariables = {
+  input: CreateTeamMemberInput,
+  condition?: ModelTeamMemberConditionInput | null,
+};
+
+export type CreateTeamMemberMutation = {
+  createTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type UpdateTeamMemberMutationVariables = {
+  input: UpdateTeamMemberInput,
+  condition?: ModelTeamMemberConditionInput | null,
+};
+
+export type UpdateTeamMemberMutation = {
+  updateTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type DeleteTeamMemberMutationVariables = {
+  input: DeleteTeamMemberInput,
+  condition?: ModelTeamMemberConditionInput | null,
+};
+
+export type DeleteTeamMemberMutation = {
+  deleteTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type CreateTeamInvitationMutationVariables = {
+  input: CreateTeamInvitationInput,
+  condition?: ModelTeamInvitationConditionInput | null,
+};
+
+export type CreateTeamInvitationMutation = {
+  createTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
+  } | null,
+};
+
+export type UpdateTeamInvitationMutationVariables = {
+  input: UpdateTeamInvitationInput,
+  condition?: ModelTeamInvitationConditionInput | null,
+};
+
+export type UpdateTeamInvitationMutation = {
+  updateTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
+  } | null,
+};
+
+export type DeleteTeamInvitationMutationVariables = {
+  input: DeleteTeamInvitationInput,
+  condition?: ModelTeamInvitationConditionInput | null,
+};
+
+export type DeleteTeamInvitationMutation = {
+  deleteTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
+  } | null,
+};
+
 export type GetUserProfileQueryVariables = {
   id: string,
 };
@@ -1137,6 +2322,16 @@ export type GetUserProfileQuery = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -1214,6 +2409,16 @@ export type ListUserProfilesQuery = {
       visibility: UserProfileVisibility,
       name: string,
       searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
       tagline?: string | null,
       about?: string | null,
       interests?:  {
@@ -1259,6 +2464,16 @@ export type SyncUserProfilesQuery = {
       visibility: UserProfileVisibility,
       name: string,
       searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
       tagline?: string | null,
       about?: string | null,
       interests?:  {
@@ -1276,6 +2491,102 @@ export type SyncUserProfilesQuery = {
         nextToken?: string | null,
         startedAt?: number | null,
       } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetUserImageQueryVariables = {
+  id: string,
+};
+
+export type GetUserImageQuery = {
+  getUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListUserImagesQueryVariables = {
+  filter?: ModelUserImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUserImagesQuery = {
+  listUserImages?:  {
+    __typename: "ModelUserImageConnection",
+    items:  Array< {
+      __typename: "UserImage",
+      id: string,
+      userProfileId: string,
+      image:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncUserImagesQueryVariables = {
+  filter?: ModelUserImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncUserImagesQuery = {
+  syncUserImages?:  {
+    __typename: "ModelUserImageConnection",
+    items:  Array< {
+      __typename: "UserImage",
+      id: string,
+      userProfileId: string,
+      image:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      },
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1707,6 +3018,551 @@ export type SyncUserNotificationsQuery = {
   } | null,
 };
 
+export type GetTeamQueryVariables = {
+  id: string,
+};
+
+export type GetTeamQuery = {
+  getTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListTeamsQueryVariables = {
+  filter?: ModelTeamFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTeamsQuery = {
+  listTeams?:  {
+    __typename: "ModelTeamConnection",
+    items:  Array< {
+      __typename: "Team",
+      id: string,
+      name: string,
+      searchName: string,
+      visibility: TeamVisibility,
+      teamType: TeamType,
+      customTeamType?: string | null,
+      description: string,
+      teamMembers?:  {
+        __typename: "ModelTeamMemberConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      invitations?:  {
+        __typename: "ModelTeamInvitationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncTeamsQueryVariables = {
+  filter?: ModelTeamFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncTeamsQuery = {
+  syncTeams?:  {
+    __typename: "ModelTeamConnection",
+    items:  Array< {
+      __typename: "Team",
+      id: string,
+      name: string,
+      searchName: string,
+      visibility: TeamVisibility,
+      teamType: TeamType,
+      customTeamType?: string | null,
+      description: string,
+      teamMembers?:  {
+        __typename: "ModelTeamMemberConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      invitations?:  {
+        __typename: "ModelTeamInvitationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetTeamMemberQueryVariables = {
+  id: string,
+};
+
+export type GetTeamMemberQuery = {
+  getTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type ListTeamMembersQueryVariables = {
+  filter?: ModelTeamMemberFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTeamMembersQuery = {
+  listTeamMembers?:  {
+    __typename: "ModelTeamMemberConnection",
+    items:  Array< {
+      __typename: "TeamMember",
+      id: string,
+      teamId: string,
+      userProfile:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      role: TeamMemberRole,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      teamMemberUserProfileId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncTeamMembersQueryVariables = {
+  filter?: ModelTeamMemberFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncTeamMembersQuery = {
+  syncTeamMembers?:  {
+    __typename: "ModelTeamMemberConnection",
+    items:  Array< {
+      __typename: "TeamMember",
+      id: string,
+      teamId: string,
+      userProfile:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      role: TeamMemberRole,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      teamMemberUserProfileId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetTeamInvitationQueryVariables = {
+  id: string,
+};
+
+export type GetTeamInvitationQuery = {
+  getTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
+  } | null,
+};
+
+export type ListTeamInvitationsQueryVariables = {
+  filter?: ModelTeamInvitationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTeamInvitationsQuery = {
+  listTeamInvitations?:  {
+    __typename: "ModelTeamInvitationConnection",
+    items:  Array< {
+      __typename: "TeamInvitation",
+      id: string,
+      teamId: string,
+      role: TeamMemberRole,
+      status: TeamInvitationStatus,
+      userProfile?:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null,
+      externalEmail?: string | null,
+      invitedByUser:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      responseDateTime?: string | null,
+      responseComment?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      teamInvitationUserProfileId?: string | null,
+      teamInvitationInvitedByUserId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncTeamInvitationsQueryVariables = {
+  filter?: ModelTeamInvitationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncTeamInvitationsQuery = {
+  syncTeamInvitations?:  {
+    __typename: "ModelTeamInvitationConnection",
+    items:  Array< {
+      __typename: "TeamInvitation",
+      id: string,
+      teamId: string,
+      role: TeamMemberRole,
+      status: TeamInvitationStatus,
+      userProfile?:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null,
+      externalEmail?: string | null,
+      invitedByUser:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      responseDateTime?: string | null,
+      responseComment?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      teamInvitationUserProfileId?: string | null,
+      teamInvitationInvitedByUserId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type UserImagesByUserProfileIdQueryVariables = {
+  userProfileId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserImagesByUserProfileIdQuery = {
+  userImagesByUserProfileId?:  {
+    __typename: "ModelUserImageConnection",
+    items:  Array< {
+      __typename: "UserImage",
+      id: string,
+      userProfileId: string,
+      image:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type UserSkillsByUserProfileIdQueryVariables = {
   userProfileId: string,
   sortDirection?: ModelSortDirection | null,
@@ -1813,6 +3669,112 @@ export type UserNotificationsByUserProfileIdQuery = {
   } | null,
 };
 
+export type TeamMembersByTeamIdQueryVariables = {
+  teamId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTeamMemberFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TeamMembersByTeamIdQuery = {
+  teamMembersByTeamId?:  {
+    __typename: "ModelTeamMemberConnection",
+    items:  Array< {
+      __typename: "TeamMember",
+      id: string,
+      teamId: string,
+      userProfile:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      role: TeamMemberRole,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      teamMemberUserProfileId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type TeamInvitationsByTeamIdQueryVariables = {
+  teamId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTeamInvitationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TeamInvitationsByTeamIdQuery = {
+  teamInvitationsByTeamId?:  {
+    __typename: "ModelTeamInvitationConnection",
+    items:  Array< {
+      __typename: "TeamInvitation",
+      id: string,
+      teamId: string,
+      role: TeamMemberRole,
+      status: TeamInvitationStatus,
+      userProfile?:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null,
+      externalEmail?: string | null,
+      invitedByUser:  {
+        __typename: "UserProfile",
+        id: string,
+        userId: string,
+        visibility: UserProfileVisibility,
+        name: string,
+        searchName: string,
+        tagline?: string | null,
+        about?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      responseDateTime?: string | null,
+      responseComment?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      teamInvitationUserProfileId?: string | null,
+      teamInvitationInvitedByUserId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type OnCreateUserProfileSubscriptionVariables = {
   filter?: ModelSubscriptionUserProfileFilterInput | null,
 };
@@ -1825,6 +3787,16 @@ export type OnCreateUserProfileSubscription = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -1898,6 +3870,16 @@ export type OnUpdateUserProfileSubscription = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -1971,6 +3953,16 @@ export type OnDeleteUserProfileSubscription = {
     visibility: UserProfileVisibility,
     name: string,
     searchName: string,
+    profileImage?:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    } | null,
     tagline?: string | null,
     about?: string | null,
     interests?:  {
@@ -2024,6 +4016,87 @@ export type OnDeleteUserProfileSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateUserImageSubscriptionVariables = {
+  filter?: ModelSubscriptionUserImageFilterInput | null,
+};
+
+export type OnCreateUserImageSubscription = {
+  onCreateUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateUserImageSubscriptionVariables = {
+  filter?: ModelSubscriptionUserImageFilterInput | null,
+};
+
+export type OnUpdateUserImageSubscription = {
+  onUpdateUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteUserImageSubscriptionVariables = {
+  filter?: ModelSubscriptionUserImageFilterInput | null,
+};
+
+export type OnDeleteUserImageSubscription = {
+  onDeleteUserImage?:  {
+    __typename: "UserImage",
+    id: string,
+    userProfileId: string,
+    image:  {
+      __typename: "Image",
+      storageKey: string,
+      alt: string,
+      searchAlt: string,
+      caption?: string | null,
+      searchCaption?: string | null,
+      detail?: string | null,
+      searchDetail?: string | null,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2374,5 +4447,677 @@ export type OnDeleteUserNotificationSubscription = {
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateTeamSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamFilterInput | null,
+};
+
+export type OnCreateTeamSubscription = {
+  onCreateTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateTeamSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamFilterInput | null,
+};
+
+export type OnUpdateTeamSubscription = {
+  onUpdateTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteTeamSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamFilterInput | null,
+};
+
+export type OnDeleteTeamSubscription = {
+  onDeleteTeam?:  {
+    __typename: "Team",
+    id: string,
+    name: string,
+    searchName: string,
+    visibility: TeamVisibility,
+    teamType: TeamType,
+    customTeamType?: string | null,
+    description: string,
+    teamMembers?:  {
+      __typename: "ModelTeamMemberConnection",
+      items:  Array< {
+        __typename: "TeamMember",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamMemberUserProfileId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    invitations?:  {
+      __typename: "ModelTeamInvitationConnection",
+      items:  Array< {
+        __typename: "TeamInvitation",
+        id: string,
+        teamId: string,
+        role: TeamMemberRole,
+        status: TeamInvitationStatus,
+        externalEmail?: string | null,
+        responseDateTime?: string | null,
+        responseComment?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        teamInvitationUserProfileId?: string | null,
+        teamInvitationInvitedByUserId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateTeamMemberSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamMemberFilterInput | null,
+};
+
+export type OnCreateTeamMemberSubscription = {
+  onCreateTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type OnUpdateTeamMemberSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamMemberFilterInput | null,
+};
+
+export type OnUpdateTeamMemberSubscription = {
+  onUpdateTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type OnDeleteTeamMemberSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamMemberFilterInput | null,
+};
+
+export type OnDeleteTeamMemberSubscription = {
+  onDeleteTeamMember?:  {
+    __typename: "TeamMember",
+    id: string,
+    teamId: string,
+    userProfile:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    role: TeamMemberRole,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamMemberUserProfileId: string,
+  } | null,
+};
+
+export type OnCreateTeamInvitationSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamInvitationFilterInput | null,
+};
+
+export type OnCreateTeamInvitationSubscription = {
+  onCreateTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
+  } | null,
+};
+
+export type OnUpdateTeamInvitationSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamInvitationFilterInput | null,
+};
+
+export type OnUpdateTeamInvitationSubscription = {
+  onUpdateTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
+  } | null,
+};
+
+export type OnDeleteTeamInvitationSubscriptionVariables = {
+  filter?: ModelSubscriptionTeamInvitationFilterInput | null,
+};
+
+export type OnDeleteTeamInvitationSubscription = {
+  onDeleteTeamInvitation?:  {
+    __typename: "TeamInvitation",
+    id: string,
+    teamId: string,
+    role: TeamMemberRole,
+    status: TeamInvitationStatus,
+    userProfile?:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null,
+    externalEmail?: string | null,
+    invitedByUser:  {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      profileImage?:  {
+        __typename: "Image",
+        storageKey: string,
+        alt: string,
+        searchAlt: string,
+        caption?: string | null,
+        searchCaption?: string | null,
+        detail?: string | null,
+        searchDetail?: string | null,
+      } | null,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    responseDateTime?: string | null,
+    responseComment?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    teamInvitationUserProfileId?: string | null,
+    teamInvitationInvitedByUserId: string,
   } | null,
 };
