@@ -8,10 +8,23 @@ const UserProfileVisibility = {
   "ARCHIVED": "ARCHIVED"
 };
 
-const { Post, UserProfile } = initSchema(schema);
+const UserNotificationLevel = {
+  "NORMAL": "NORMAL",
+  "INFO": "INFO",
+  "SUCCESS": "SUCCESS",
+  "WARNING": "WARNING",
+  "ERROR": "ERROR"
+};
+
+const { UserProfile, UserInterest, Interest, UserSkill, Skill, UserNotification } = initSchema(schema);
 
 export {
-  Post,
   UserProfile,
-  UserProfileVisibility
+  UserInterest,
+  Interest,
+  UserSkill,
+  Skill,
+  UserNotification,
+  UserProfileVisibility,
+  UserNotificationLevel
 };

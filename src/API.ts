@@ -7,6 +7,10 @@ export type CreateUserProfileInput = {
   userId: string,
   visibility: UserProfileVisibility,
   name: string,
+  searchName: string,
+  tagline?: string | null,
+  about?: string | null,
+  _version?: number | null,
 };
 
 export enum UserProfileVisibility {
@@ -20,6 +24,9 @@ export type ModelUserProfileConditionInput = {
   userId?: ModelIDInput | null,
   visibility?: ModelUserProfileVisibilityInput | null,
   name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  tagline?: ModelStringInput | null,
+  about?: ModelStringInput | null,
   and?: Array< ModelUserProfileConditionInput | null > | null,
   or?: Array< ModelUserProfileConditionInput | null > | null,
   not?: ModelUserProfileConditionInput | null,
@@ -92,53 +99,277 @@ export type UserProfile = {
   userId: string,
   visibility: UserProfileVisibility,
   name: string,
+  searchName: string,
+  tagline?: string | null,
+  about?: string | null,
+  interests?: ModelUserInterestConnection | null,
+  skills?: ModelUserSkillConnection | null,
+  notifications?: ModelUserNotificationConnection | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
 };
+
+export type ModelUserInterestConnection = {
+  __typename: "ModelUserInterestConnection",
+  items:  Array<UserInterest | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type UserInterest = {
+  __typename: "UserInterest",
+  id: string,
+  userProfileId: string,
+  interest: Interest,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  userInterestInterestId: string,
+};
+
+export type Interest = {
+  __typename: "Interest",
+  id: string,
+  name: string,
+  searchName: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type ModelUserSkillConnection = {
+  __typename: "ModelUserSkillConnection",
+  items:  Array<UserSkill | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type UserSkill = {
+  __typename: "UserSkill",
+  id: string,
+  userProfileId: string,
+  skill: Skill,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  userSkillSkillId: string,
+};
+
+export type Skill = {
+  __typename: "Skill",
+  id: string,
+  name: string,
+  searchName: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type ModelUserNotificationConnection = {
+  __typename: "ModelUserNotificationConnection",
+  items:  Array<UserNotification | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type UserNotification = {
+  __typename: "UserNotification",
+  id: string,
+  userProfileId: string,
+  message: string,
+  level: UserNotificationLevel,
+  displayedAt?: string | null,
+  heading?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export enum UserNotificationLevel {
+  NORMAL = "NORMAL",
+  INFO = "INFO",
+  SUCCESS = "SUCCESS",
+  WARNING = "WARNING",
+  ERROR = "ERROR",
+}
+
 
 export type UpdateUserProfileInput = {
   id: string,
   userId?: string | null,
   visibility?: UserProfileVisibility | null,
   name?: string | null,
+  searchName?: string | null,
+  tagline?: string | null,
+  about?: string | null,
+  _version?: number | null,
 };
 
 export type DeleteUserProfileInput = {
   id: string,
+  _version?: number | null,
 };
 
-export type CreatePostInput = {
+export type CreateUserSkillInput = {
   id?: string | null,
-  title: string,
-  content: string,
+  userProfileId: string,
+  _version?: number | null,
+  userSkillSkillId: string,
 };
 
-export type ModelPostConditionInput = {
-  title?: ModelStringInput | null,
-  content?: ModelStringInput | null,
-  and?: Array< ModelPostConditionInput | null > | null,
-  or?: Array< ModelPostConditionInput | null > | null,
-  not?: ModelPostConditionInput | null,
+export type ModelUserSkillConditionInput = {
+  userProfileId?: ModelIDInput | null,
+  and?: Array< ModelUserSkillConditionInput | null > | null,
+  or?: Array< ModelUserSkillConditionInput | null > | null,
+  not?: ModelUserSkillConditionInput | null,
+  userSkillSkillId?: ModelIDInput | null,
 };
 
-export type Post = {
-  __typename: "Post",
+export type UpdateUserSkillInput = {
   id: string,
-  title: string,
-  content: string,
-  createdAt: string,
-  updatedAt: string,
-  owner?: string | null,
+  userProfileId?: string | null,
+  _version?: number | null,
+  userSkillSkillId?: string | null,
 };
 
-export type UpdatePostInput = {
+export type DeleteUserSkillInput = {
   id: string,
-  title?: string | null,
-  content?: string | null,
+  _version?: number | null,
 };
 
-export type DeletePostInput = {
+export type CreateSkillInput = {
+  id?: string | null,
+  name: string,
+  searchName: string,
+  _version?: number | null,
+};
+
+export type ModelSkillConditionInput = {
+  name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  and?: Array< ModelSkillConditionInput | null > | null,
+  or?: Array< ModelSkillConditionInput | null > | null,
+  not?: ModelSkillConditionInput | null,
+};
+
+export type UpdateSkillInput = {
   id: string,
+  name?: string | null,
+  searchName?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteSkillInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateUserInterestInput = {
+  id?: string | null,
+  userProfileId: string,
+  _version?: number | null,
+  userInterestInterestId: string,
+};
+
+export type ModelUserInterestConditionInput = {
+  userProfileId?: ModelIDInput | null,
+  and?: Array< ModelUserInterestConditionInput | null > | null,
+  or?: Array< ModelUserInterestConditionInput | null > | null,
+  not?: ModelUserInterestConditionInput | null,
+  userInterestInterestId?: ModelIDInput | null,
+};
+
+export type UpdateUserInterestInput = {
+  id: string,
+  userProfileId?: string | null,
+  _version?: number | null,
+  userInterestInterestId?: string | null,
+};
+
+export type DeleteUserInterestInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateInterestInput = {
+  id?: string | null,
+  name: string,
+  searchName: string,
+  _version?: number | null,
+};
+
+export type ModelInterestConditionInput = {
+  name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  and?: Array< ModelInterestConditionInput | null > | null,
+  or?: Array< ModelInterestConditionInput | null > | null,
+  not?: ModelInterestConditionInput | null,
+};
+
+export type UpdateInterestInput = {
+  id: string,
+  name?: string | null,
+  searchName?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteInterestInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateUserNotificationInput = {
+  id?: string | null,
+  userProfileId: string,
+  message: string,
+  level: UserNotificationLevel,
+  displayedAt?: string | null,
+  heading?: string | null,
+  _version?: number | null,
+};
+
+export type ModelUserNotificationConditionInput = {
+  userProfileId?: ModelIDInput | null,
+  message?: ModelStringInput | null,
+  level?: ModelUserNotificationLevelInput | null,
+  displayedAt?: ModelStringInput | null,
+  heading?: ModelStringInput | null,
+  and?: Array< ModelUserNotificationConditionInput | null > | null,
+  or?: Array< ModelUserNotificationConditionInput | null > | null,
+  not?: ModelUserNotificationConditionInput | null,
+};
+
+export type ModelUserNotificationLevelInput = {
+  eq?: UserNotificationLevel | null,
+  ne?: UserNotificationLevel | null,
+};
+
+export type UpdateUserNotificationInput = {
+  id: string,
+  userProfileId?: string | null,
+  message?: string | null,
+  level?: UserNotificationLevel | null,
+  displayedAt?: string | null,
+  heading?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteUserNotificationInput = {
+  id: string,
+  _version?: number | null,
 };
 
 export type ModelUserProfileFilterInput = {
@@ -146,6 +377,9 @@ export type ModelUserProfileFilterInput = {
   userId?: ModelIDInput | null,
   visibility?: ModelUserProfileVisibilityInput | null,
   name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  tagline?: ModelStringInput | null,
+  about?: ModelStringInput | null,
   and?: Array< ModelUserProfileFilterInput | null > | null,
   or?: Array< ModelUserProfileFilterInput | null > | null,
   not?: ModelUserProfileFilterInput | null,
@@ -155,28 +389,85 @@ export type ModelUserProfileConnection = {
   __typename: "ModelUserProfileConnection",
   items:  Array<UserProfile | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
-export type ModelPostFilterInput = {
+export type ModelUserSkillFilterInput = {
   id?: ModelIDInput | null,
-  title?: ModelStringInput | null,
-  content?: ModelStringInput | null,
-  and?: Array< ModelPostFilterInput | null > | null,
-  or?: Array< ModelPostFilterInput | null > | null,
-  not?: ModelPostFilterInput | null,
+  userProfileId?: ModelIDInput | null,
+  and?: Array< ModelUserSkillFilterInput | null > | null,
+  or?: Array< ModelUserSkillFilterInput | null > | null,
+  not?: ModelUserSkillFilterInput | null,
+  userSkillSkillId?: ModelIDInput | null,
 };
 
-export type ModelPostConnection = {
-  __typename: "ModelPostConnection",
-  items:  Array<Post | null >,
-  nextToken?: string | null,
+export type ModelSkillFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  and?: Array< ModelSkillFilterInput | null > | null,
+  or?: Array< ModelSkillFilterInput | null > | null,
+  not?: ModelSkillFilterInput | null,
 };
+
+export type ModelSkillConnection = {
+  __typename: "ModelSkillConnection",
+  items:  Array<Skill | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelUserInterestFilterInput = {
+  id?: ModelIDInput | null,
+  userProfileId?: ModelIDInput | null,
+  and?: Array< ModelUserInterestFilterInput | null > | null,
+  or?: Array< ModelUserInterestFilterInput | null > | null,
+  not?: ModelUserInterestFilterInput | null,
+  userInterestInterestId?: ModelIDInput | null,
+};
+
+export type ModelInterestFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  searchName?: ModelStringInput | null,
+  and?: Array< ModelInterestFilterInput | null > | null,
+  or?: Array< ModelInterestFilterInput | null > | null,
+  not?: ModelInterestFilterInput | null,
+};
+
+export type ModelInterestConnection = {
+  __typename: "ModelInterestConnection",
+  items:  Array<Interest | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelUserNotificationFilterInput = {
+  id?: ModelIDInput | null,
+  userProfileId?: ModelIDInput | null,
+  message?: ModelStringInput | null,
+  level?: ModelUserNotificationLevelInput | null,
+  displayedAt?: ModelStringInput | null,
+  heading?: ModelStringInput | null,
+  and?: Array< ModelUserNotificationFilterInput | null > | null,
+  or?: Array< ModelUserNotificationFilterInput | null > | null,
+  not?: ModelUserNotificationFilterInput | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelSubscriptionUserProfileFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   userId?: ModelSubscriptionIDInput | null,
   visibility?: ModelSubscriptionStringInput | null,
   name?: ModelSubscriptionStringInput | null,
+  searchName?: ModelSubscriptionStringInput | null,
+  tagline?: ModelSubscriptionStringInput | null,
+  about?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserProfileFilterInput | null > | null,
   or?: Array< ModelSubscriptionUserProfileFilterInput | null > | null,
 };
@@ -211,12 +502,45 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionPostFilterInput = {
+export type ModelSubscriptionUserSkillFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  title?: ModelSubscriptionStringInput | null,
-  content?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionPostFilterInput | null > | null,
-  or?: Array< ModelSubscriptionPostFilterInput | null > | null,
+  userProfileId?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionUserSkillFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserSkillFilterInput | null > | null,
+};
+
+export type ModelSubscriptionSkillFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  searchName?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionSkillFilterInput | null > | null,
+  or?: Array< ModelSubscriptionSkillFilterInput | null > | null,
+};
+
+export type ModelSubscriptionUserInterestFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userProfileId?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionUserInterestFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserInterestFilterInput | null > | null,
+};
+
+export type ModelSubscriptionInterestFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  searchName?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionInterestFilterInput | null > | null,
+  or?: Array< ModelSubscriptionInterestFilterInput | null > | null,
+};
+
+export type ModelSubscriptionUserNotificationFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userProfileId?: ModelSubscriptionIDInput | null,
+  message?: ModelSubscriptionStringInput | null,
+  level?: ModelSubscriptionStringInput | null,
+  displayedAt?: ModelSubscriptionStringInput | null,
+  heading?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionUserNotificationFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserNotificationFilterInput | null > | null,
 };
 
 export type CreateUserProfileMutationVariables = {
@@ -231,8 +555,65 @@ export type CreateUserProfileMutation = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -248,8 +629,65 @@ export type UpdateUserProfileMutation = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -265,59 +703,425 @@ export type DeleteUserProfileMutation = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type CreatePostMutationVariables = {
-  input: CreatePostInput,
-  condition?: ModelPostConditionInput | null,
+export type CreateUserSkillMutationVariables = {
+  input: CreateUserSkillInput,
+  condition?: ModelUserSkillConditionInput | null,
 };
 
-export type CreatePostMutation = {
-  createPost?:  {
-    __typename: "Post",
+export type CreateUserSkillMutation = {
+  createUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
   } | null,
 };
 
-export type UpdatePostMutationVariables = {
-  input: UpdatePostInput,
-  condition?: ModelPostConditionInput | null,
+export type UpdateUserSkillMutationVariables = {
+  input: UpdateUserSkillInput,
+  condition?: ModelUserSkillConditionInput | null,
 };
 
-export type UpdatePostMutation = {
-  updatePost?:  {
-    __typename: "Post",
+export type UpdateUserSkillMutation = {
+  updateUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
   } | null,
 };
 
-export type DeletePostMutationVariables = {
-  input: DeletePostInput,
-  condition?: ModelPostConditionInput | null,
+export type DeleteUserSkillMutationVariables = {
+  input: DeleteUserSkillInput,
+  condition?: ModelUserSkillConditionInput | null,
 };
 
-export type DeletePostMutation = {
-  deletePost?:  {
-    __typename: "Post",
+export type DeleteUserSkillMutation = {
+  deleteUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
+  } | null,
+};
+
+export type CreateSkillMutationVariables = {
+  input: CreateSkillInput,
+  condition?: ModelSkillConditionInput | null,
+};
+
+export type CreateSkillMutation = {
+  createSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateSkillMutationVariables = {
+  input: UpdateSkillInput,
+  condition?: ModelSkillConditionInput | null,
+};
+
+export type UpdateSkillMutation = {
+  updateSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteSkillMutationVariables = {
+  input: DeleteSkillInput,
+  condition?: ModelSkillConditionInput | null,
+};
+
+export type DeleteSkillMutation = {
+  deleteSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateUserInterestMutationVariables = {
+  input: CreateUserInterestInput,
+  condition?: ModelUserInterestConditionInput | null,
+};
+
+export type CreateUserInterestMutation = {
+  createUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type UpdateUserInterestMutationVariables = {
+  input: UpdateUserInterestInput,
+  condition?: ModelUserInterestConditionInput | null,
+};
+
+export type UpdateUserInterestMutation = {
+  updateUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type DeleteUserInterestMutationVariables = {
+  input: DeleteUserInterestInput,
+  condition?: ModelUserInterestConditionInput | null,
+};
+
+export type DeleteUserInterestMutation = {
+  deleteUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type CreateInterestMutationVariables = {
+  input: CreateInterestInput,
+  condition?: ModelInterestConditionInput | null,
+};
+
+export type CreateInterestMutation = {
+  createInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateInterestMutationVariables = {
+  input: UpdateInterestInput,
+  condition?: ModelInterestConditionInput | null,
+};
+
+export type UpdateInterestMutation = {
+  updateInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteInterestMutationVariables = {
+  input: DeleteInterestInput,
+  condition?: ModelInterestConditionInput | null,
+};
+
+export type DeleteInterestMutation = {
+  deleteInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateUserNotificationMutationVariables = {
+  input: CreateUserNotificationInput,
+  condition?: ModelUserNotificationConditionInput | null,
+};
+
+export type CreateUserNotificationMutation = {
+  createUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateUserNotificationMutationVariables = {
+  input: UpdateUserNotificationInput,
+  condition?: ModelUserNotificationConditionInput | null,
+};
+
+export type UpdateUserNotificationMutation = {
+  updateUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteUserNotificationMutationVariables = {
+  input: DeleteUserNotificationInput,
+  condition?: ModelUserNotificationConditionInput | null,
+};
+
+export type DeleteUserNotificationMutation = {
+  deleteUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -332,8 +1136,65 @@ export type GetUserProfileQuery = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -352,48 +1213,603 @@ export type ListUserProfilesQuery = {
       userId: string,
       visibility: UserProfileVisibility,
       name: string,
+      searchName: string,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
-export type GetPostQueryVariables = {
+export type SyncUserProfilesQueryVariables = {
+  filter?: ModelUserProfileFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncUserProfilesQuery = {
+  syncUserProfiles?:  {
+    __typename: "ModelUserProfileConnection",
+    items:  Array< {
+      __typename: "UserProfile",
+      id: string,
+      userId: string,
+      visibility: UserProfileVisibility,
+      name: string,
+      searchName: string,
+      tagline?: string | null,
+      about?: string | null,
+      interests?:  {
+        __typename: "ModelUserInterestConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      skills?:  {
+        __typename: "ModelUserSkillConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      notifications?:  {
+        __typename: "ModelUserNotificationConnection",
+        nextToken?: string | null,
+        startedAt?: number | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetUserSkillQueryVariables = {
   id: string,
 };
 
-export type GetPostQuery = {
-  getPost?:  {
-    __typename: "Post",
+export type GetUserSkillQuery = {
+  getUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
   } | null,
 };
 
-export type ListPostsQueryVariables = {
-  filter?: ModelPostFilterInput | null,
+export type ListUserSkillsQueryVariables = {
+  filter?: ModelUserSkillFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListPostsQuery = {
-  listPosts?:  {
-    __typename: "ModelPostConnection",
+export type ListUserSkillsQuery = {
+  listUserSkills?:  {
+    __typename: "ModelUserSkillConnection",
     items:  Array< {
-      __typename: "Post",
+      __typename: "UserSkill",
       id: string,
-      title: string,
-      content: string,
+      userProfileId: string,
+      skill:  {
+        __typename: "Skill",
+        id: string,
+        name: string,
+        searchName: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
       createdAt: string,
       updatedAt: string,
-      owner?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userSkillSkillId: string,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncUserSkillsQueryVariables = {
+  filter?: ModelUserSkillFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncUserSkillsQuery = {
+  syncUserSkills?:  {
+    __typename: "ModelUserSkillConnection",
+    items:  Array< {
+      __typename: "UserSkill",
+      id: string,
+      userProfileId: string,
+      skill:  {
+        __typename: "Skill",
+        id: string,
+        name: string,
+        searchName: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userSkillSkillId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetSkillQueryVariables = {
+  id: string,
+};
+
+export type GetSkillQuery = {
+  getSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListSkillsQueryVariables = {
+  filter?: ModelSkillFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSkillsQuery = {
+  listSkills?:  {
+    __typename: "ModelSkillConnection",
+    items:  Array< {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncSkillsQueryVariables = {
+  filter?: ModelSkillFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncSkillsQuery = {
+  syncSkills?:  {
+    __typename: "ModelSkillConnection",
+    items:  Array< {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetUserInterestQueryVariables = {
+  id: string,
+};
+
+export type GetUserInterestQuery = {
+  getUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type ListUserInterestsQueryVariables = {
+  filter?: ModelUserInterestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUserInterestsQuery = {
+  listUserInterests?:  {
+    __typename: "ModelUserInterestConnection",
+    items:  Array< {
+      __typename: "UserInterest",
+      id: string,
+      userProfileId: string,
+      interest:  {
+        __typename: "Interest",
+        id: string,
+        name: string,
+        searchName: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userInterestInterestId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncUserInterestsQueryVariables = {
+  filter?: ModelUserInterestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncUserInterestsQuery = {
+  syncUserInterests?:  {
+    __typename: "ModelUserInterestConnection",
+    items:  Array< {
+      __typename: "UserInterest",
+      id: string,
+      userProfileId: string,
+      interest:  {
+        __typename: "Interest",
+        id: string,
+        name: string,
+        searchName: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userInterestInterestId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetInterestQueryVariables = {
+  id: string,
+};
+
+export type GetInterestQuery = {
+  getInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListInterestsQueryVariables = {
+  filter?: ModelInterestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListInterestsQuery = {
+  listInterests?:  {
+    __typename: "ModelInterestConnection",
+    items:  Array< {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncInterestsQueryVariables = {
+  filter?: ModelInterestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncInterestsQuery = {
+  syncInterests?:  {
+    __typename: "ModelInterestConnection",
+    items:  Array< {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetUserNotificationQueryVariables = {
+  id: string,
+};
+
+export type GetUserNotificationQuery = {
+  getUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListUserNotificationsQueryVariables = {
+  filter?: ModelUserNotificationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUserNotificationsQuery = {
+  listUserNotifications?:  {
+    __typename: "ModelUserNotificationConnection",
+    items:  Array< {
+      __typename: "UserNotification",
+      id: string,
+      userProfileId: string,
+      message: string,
+      level: UserNotificationLevel,
+      displayedAt?: string | null,
+      heading?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncUserNotificationsQueryVariables = {
+  filter?: ModelUserNotificationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncUserNotificationsQuery = {
+  syncUserNotifications?:  {
+    __typename: "ModelUserNotificationConnection",
+    items:  Array< {
+      __typename: "UserNotification",
+      id: string,
+      userProfileId: string,
+      message: string,
+      level: UserNotificationLevel,
+      displayedAt?: string | null,
+      heading?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type UserSkillsByUserProfileIdQueryVariables = {
+  userProfileId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserSkillFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserSkillsByUserProfileIdQuery = {
+  userSkillsByUserProfileId?:  {
+    __typename: "ModelUserSkillConnection",
+    items:  Array< {
+      __typename: "UserSkill",
+      id: string,
+      userProfileId: string,
+      skill:  {
+        __typename: "Skill",
+        id: string,
+        name: string,
+        searchName: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userSkillSkillId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type UserInterestsByUserProfileIdQueryVariables = {
+  userProfileId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserInterestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserInterestsByUserProfileIdQuery = {
+  userInterestsByUserProfileId?:  {
+    __typename: "ModelUserInterestConnection",
+    items:  Array< {
+      __typename: "UserInterest",
+      id: string,
+      userProfileId: string,
+      interest:  {
+        __typename: "Interest",
+        id: string,
+        name: string,
+        searchName: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      },
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      userInterestInterestId: string,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type UserNotificationsByUserProfileIdQueryVariables = {
+  userProfileId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserNotificationFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserNotificationsByUserProfileIdQuery = {
+  userNotificationsByUserProfileId?:  {
+    __typename: "ModelUserNotificationConnection",
+    items:  Array< {
+      __typename: "UserNotification",
+      id: string,
+      userProfileId: string,
+      message: string,
+      level: UserNotificationLevel,
+      displayedAt?: string | null,
+      heading?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -408,8 +1824,65 @@ export type OnCreateUserProfileSubscription = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -424,8 +1897,65 @@ export type OnUpdateUserProfileSubscription = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -440,58 +1970,409 @@ export type OnDeleteUserProfileSubscription = {
     userId: string,
     visibility: UserProfileVisibility,
     name: string,
+    searchName: string,
+    tagline?: string | null,
+    about?: string | null,
+    interests?:  {
+      __typename: "ModelUserInterestConnection",
+      items:  Array< {
+        __typename: "UserInterest",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userInterestInterestId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    skills?:  {
+      __typename: "ModelUserSkillConnection",
+      items:  Array< {
+        __typename: "UserSkill",
+        id: string,
+        userProfileId: string,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+        userSkillSkillId: string,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+    notifications?:  {
+      __typename: "ModelUserNotificationConnection",
+      items:  Array< {
+        __typename: "UserNotification",
+        id: string,
+        userProfileId: string,
+        message: string,
+        level: UserNotificationLevel,
+        displayedAt?: string | null,
+        heading?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        _version: number,
+        _deleted?: boolean | null,
+        _lastChangedAt: number,
+      } | null >,
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type OnCreatePostSubscriptionVariables = {
-  filter?: ModelSubscriptionPostFilterInput | null,
-  owner?: string | null,
+export type OnCreateUserSkillSubscriptionVariables = {
+  filter?: ModelSubscriptionUserSkillFilterInput | null,
 };
 
-export type OnCreatePostSubscription = {
-  onCreatePost?:  {
-    __typename: "Post",
+export type OnCreateUserSkillSubscription = {
+  onCreateUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
   } | null,
 };
 
-export type OnUpdatePostSubscriptionVariables = {
-  filter?: ModelSubscriptionPostFilterInput | null,
-  owner?: string | null,
+export type OnUpdateUserSkillSubscriptionVariables = {
+  filter?: ModelSubscriptionUserSkillFilterInput | null,
 };
 
-export type OnUpdatePostSubscription = {
-  onUpdatePost?:  {
-    __typename: "Post",
+export type OnUpdateUserSkillSubscription = {
+  onUpdateUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
   } | null,
 };
 
-export type OnDeletePostSubscriptionVariables = {
-  filter?: ModelSubscriptionPostFilterInput | null,
-  owner?: string | null,
+export type OnDeleteUserSkillSubscriptionVariables = {
+  filter?: ModelSubscriptionUserSkillFilterInput | null,
 };
 
-export type OnDeletePostSubscription = {
-  onDeletePost?:  {
-    __typename: "Post",
+export type OnDeleteUserSkillSubscription = {
+  onDeleteUserSkill?:  {
+    __typename: "UserSkill",
     id: string,
-    title: string,
-    content: string,
+    userProfileId: string,
+    skill:  {
+      __typename: "Skill",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userSkillSkillId: string,
+  } | null,
+};
+
+export type OnCreateSkillSubscriptionVariables = {
+  filter?: ModelSubscriptionSkillFilterInput | null,
+};
+
+export type OnCreateSkillSubscription = {
+  onCreateSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateSkillSubscriptionVariables = {
+  filter?: ModelSubscriptionSkillFilterInput | null,
+};
+
+export type OnUpdateSkillSubscription = {
+  onUpdateSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteSkillSubscriptionVariables = {
+  filter?: ModelSubscriptionSkillFilterInput | null,
+};
+
+export type OnDeleteSkillSubscription = {
+  onDeleteSkill?:  {
+    __typename: "Skill",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateUserInterestSubscriptionVariables = {
+  filter?: ModelSubscriptionUserInterestFilterInput | null,
+};
+
+export type OnCreateUserInterestSubscription = {
+  onCreateUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type OnUpdateUserInterestSubscriptionVariables = {
+  filter?: ModelSubscriptionUserInterestFilterInput | null,
+};
+
+export type OnUpdateUserInterestSubscription = {
+  onUpdateUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type OnDeleteUserInterestSubscriptionVariables = {
+  filter?: ModelSubscriptionUserInterestFilterInput | null,
+};
+
+export type OnDeleteUserInterestSubscription = {
+  onDeleteUserInterest?:  {
+    __typename: "UserInterest",
+    id: string,
+    userProfileId: string,
+    interest:  {
+      __typename: "Interest",
+      id: string,
+      name: string,
+      searchName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    userInterestInterestId: string,
+  } | null,
+};
+
+export type OnCreateInterestSubscriptionVariables = {
+  filter?: ModelSubscriptionInterestFilterInput | null,
+};
+
+export type OnCreateInterestSubscription = {
+  onCreateInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateInterestSubscriptionVariables = {
+  filter?: ModelSubscriptionInterestFilterInput | null,
+};
+
+export type OnUpdateInterestSubscription = {
+  onUpdateInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteInterestSubscriptionVariables = {
+  filter?: ModelSubscriptionInterestFilterInput | null,
+};
+
+export type OnDeleteInterestSubscription = {
+  onDeleteInterest?:  {
+    __typename: "Interest",
+    id: string,
+    name: string,
+    searchName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateUserNotificationSubscriptionVariables = {
+  filter?: ModelSubscriptionUserNotificationFilterInput | null,
+};
+
+export type OnCreateUserNotificationSubscription = {
+  onCreateUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateUserNotificationSubscriptionVariables = {
+  filter?: ModelSubscriptionUserNotificationFilterInput | null,
+};
+
+export type OnUpdateUserNotificationSubscription = {
+  onUpdateUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteUserNotificationSubscriptionVariables = {
+  filter?: ModelSubscriptionUserNotificationFilterInput | null,
+};
+
+export type OnDeleteUserNotificationSubscription = {
+  onDeleteUserNotification?:  {
+    __typename: "UserNotification",
+    id: string,
+    userProfileId: string,
+    message: string,
+    level: UserNotificationLevel,
+    displayedAt?: string | null,
+    heading?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };

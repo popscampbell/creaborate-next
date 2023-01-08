@@ -1,40 +1,22 @@
 {
-  "staging": {
+  "mike": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-creaborate-staging-13318-authRole",
-      "UnauthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-staging-13318-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-staging-13318-authRole",
+      "AuthRoleName": "amplify-creaboratenext-mike-195653-authRole",
+      "UnauthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaboratenext-mike-195653-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaboratenext-mike-195653-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-creaborate-staging-13318-deployment",
-      "UnauthRoleName": "amplify-creaborate-staging-13318-unauthRole",
-      "StackName": "amplify-creaborate-staging-13318",
-      "StackId": "arn:aws:cloudformation:us-west-2:546014678210:stack/amplify-creaborate-staging-13318/4403efc0-8e2b-11ed-bc2b-064e23d8712d",
-      "AmplifyAppId": "d18dzfbyyli844"
+      "DeploymentBucketName": "amplify-creaboratenext-mike-195653-deployment",
+      "UnauthRoleName": "amplify-creaboratenext-mike-195653-unauthRole",
+      "StackName": "amplify-creaboratenext-mike-195653",
+      "StackId": "arn:aws:cloudformation:us-west-2:546014678210:stack/amplify-creaboratenext-mike-195653/83a59290-8f08-11ed-b64f-063a69bdb6a3",
+      "AmplifyAppId": "dxjwg3dn57rvn"
     },
     "categories": {
       "auth": {
-        "creaboratec85e260f": {}
-      }
-    }
-  },
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-creaborate-dev-151334-authRole",
-      "UnauthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-dev-151334-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-dev-151334-authRole",
-      "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-creaborate-dev-151334-deployment",
-      "UnauthRoleName": "amplify-creaborate-dev-151334-unauthRole",
-      "StackName": "amplify-creaborate-dev-151334",
-      "StackId": "arn:aws:cloudformation:us-west-2:546014678210:stack/amplify-creaborate-dev-151334/e93c8730-8ee0-11ed-9323-06f1689fc1ef",
-      "AmplifyAppId": "d18dzfbyyli844"
-    },
-    "categories": {
-      "auth": {
-        "creaboratec85e260f": {}
+        "creaboratenextf6640575": {}
       },
       "api": {
-        "creaborate": {}
+        "creaboratenext": {}
       }
     }
   }

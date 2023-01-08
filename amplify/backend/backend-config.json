@@ -1,25 +1,10 @@
 {
   "api": {
-    "creaborate": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "creaboratec85e260f"
-        }
-      ],
+    "creaboratenext": {
+      "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authcreaboratec85e260f"
-              }
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
               "apiKeyExpirationDays": 7
@@ -33,7 +18,7 @@
     }
   },
   "auth": {
-    "creaboratec85e260f": {
+    "creaboratenextf6640575": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
