@@ -13,7 +13,7 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserProfileCreateFormInputValues = {
-    userId?: string;
+    username?: string;
     visibility?: string;
     name?: string;
     searchName?: string;
@@ -21,7 +21,7 @@ export declare type UserProfileCreateFormInputValues = {
     about?: string;
 };
 export declare type UserProfileCreateFormValidationValues = {
-    userId?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
     visibility?: ValidationFunction<string>;
     name?: ValidationFunction<string>;
     searchName?: ValidationFunction<string>;
@@ -31,7 +31,7 @@ export declare type UserProfileCreateFormValidationValues = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserProfileCreateFormOverridesProps = {
     UserProfileCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    userId?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
     visibility?: PrimitiveOverrideProps<SelectFieldProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     searchName?: PrimitiveOverrideProps<TextFieldProps>;

@@ -14,13 +14,13 @@ import {
   TextField,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { UserProfile } from "../models";
+import { UserNotification } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function UserProfileUpdateForm(props) {
+export default function UserNotificationUpdateForm(props) {
   const {
     id: idProp,
-    userProfile,
+    userNotification,
     onSuccess,
     onError,
     onSubmit,
@@ -31,49 +31,48 @@ export default function UserProfileUpdateForm(props) {
   } = props;
   const initialValues = {
     username: "",
-    visibility: undefined,
-    name: "",
-    searchName: "",
-    tagline: "",
-    about: "",
+    message: "",
+    level: undefined,
+    displayedAt: "",
+    heading: "",
   };
   const [username, setUsername] = React.useState(initialValues.username);
-  const [visibility, setVisibility] = React.useState(initialValues.visibility);
-  const [name, setName] = React.useState(initialValues.name);
-  const [searchName, setSearchName] = React.useState(initialValues.searchName);
-  const [tagline, setTagline] = React.useState(initialValues.tagline);
-  const [about, setAbout] = React.useState(initialValues.about);
+  const [message, setMessage] = React.useState(initialValues.message);
+  const [level, setLevel] = React.useState(initialValues.level);
+  const [displayedAt, setDisplayedAt] = React.useState(
+    initialValues.displayedAt
+  );
+  const [heading, setHeading] = React.useState(initialValues.heading);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = userProfileRecord
-      ? { ...initialValues, ...userProfileRecord }
+    const cleanValues = userNotificationRecord
+      ? { ...initialValues, ...userNotificationRecord }
       : initialValues;
     setUsername(cleanValues.username);
-    setVisibility(cleanValues.visibility);
-    setName(cleanValues.name);
-    setSearchName(cleanValues.searchName);
-    setTagline(cleanValues.tagline);
-    setAbout(cleanValues.about);
+    setMessage(cleanValues.message);
+    setLevel(cleanValues.level);
+    setDisplayedAt(cleanValues.displayedAt);
+    setHeading(cleanValues.heading);
     setErrors({});
   };
-  const [userProfileRecord, setUserProfileRecord] = React.useState(userProfile);
+  const [userNotificationRecord, setUserNotificationRecord] =
+    React.useState(userNotification);
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(UserProfile, idProp)
-        : userProfile;
-      setUserProfileRecord(record);
+        ? await DataStore.query(UserNotification, idProp)
+        : userNotification;
+      setUserNotificationRecord(record);
     };
     queryData();
-  }, [idProp, userProfile]);
-  React.useEffect(resetStateValues, [userProfileRecord]);
+  }, [idProp, userNotification]);
+  React.useEffect(resetStateValues, [userNotificationRecord]);
   const validations = {
     username: [{ type: "Required" }],
-    visibility: [{ type: "Required" }],
-    name: [{ type: "Required" }],
-    searchName: [{ type: "Required" }],
-    tagline: [],
-    about: [],
+    message: [{ type: "Required" }],
+    level: [{ type: "Required" }],
+    displayedAt: [],
+    heading: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -91,6 +90,23 @@ export default function UserProfileUpdateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat("default", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      calendar: "iso8601",
+      numberingSystem: "latn",
+      hour12: false,
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+  };
   return (
     <Grid
       as="form"
@@ -101,11 +117,10 @@ export default function UserProfileUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           username,
-          visibility,
-          name,
-          searchName,
-          tagline,
-          about,
+          message,
+          level,
+          displayedAt,
+          heading,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -136,7 +151,7 @@ export default function UserProfileUpdateForm(props) {
             }
           });
           await DataStore.save(
-            UserProfile.copyOf(userProfileRecord, (updated) => {
+            UserNotification.copyOf(userNotificationRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -149,7 +164,7 @@ export default function UserProfileUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserProfileUpdateForm")}
+      {...getOverrideProps(overrides, "UserNotificationUpdateForm")}
       {...rest}
     >
       <TextField
@@ -162,11 +177,10 @@ export default function UserProfileUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               username: value,
-              visibility,
-              name,
-              searchName,
-              tagline,
-              about,
+              message,
+              level,
+              displayedAt,
+              heading,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -181,166 +195,145 @@ export default function UserProfileUpdateForm(props) {
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, "username")}
       ></TextField>
-      <SelectField
-        label="Visibility"
-        placeholder="Please select an option"
-        isDisabled={false}
-        value={visibility}
+      <TextField
+        label="Message"
+        isRequired={true}
+        isReadOnly={false}
+        value={message}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               username,
-              visibility: value,
-              name,
-              searchName,
-              tagline,
-              about,
+              message: value,
+              level,
+              displayedAt,
+              heading,
             };
             const result = onChange(modelFields);
-            value = result?.visibility ?? value;
+            value = result?.message ?? value;
           }
-          if (errors.visibility?.hasError) {
-            runValidationTasks("visibility", value);
+          if (errors.message?.hasError) {
+            runValidationTasks("message", value);
           }
-          setVisibility(value);
+          setMessage(value);
         }}
-        onBlur={() => runValidationTasks("visibility", visibility)}
-        errorMessage={errors.visibility?.errorMessage}
-        hasError={errors.visibility?.hasError}
-        {...getOverrideProps(overrides, "visibility")}
+        onBlur={() => runValidationTasks("message", message)}
+        errorMessage={errors.message?.errorMessage}
+        hasError={errors.message?.hasError}
+        {...getOverrideProps(overrides, "message")}
+      ></TextField>
+      <SelectField
+        label="Level"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={level}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              message,
+              level: value,
+              displayedAt,
+              heading,
+            };
+            const result = onChange(modelFields);
+            value = result?.level ?? value;
+          }
+          if (errors.level?.hasError) {
+            runValidationTasks("level", value);
+          }
+          setLevel(value);
+        }}
+        onBlur={() => runValidationTasks("level", level)}
+        errorMessage={errors.level?.errorMessage}
+        hasError={errors.level?.hasError}
+        {...getOverrideProps(overrides, "level")}
       >
         <option
-          children="Private"
-          value="PRIVATE"
-          {...getOverrideProps(overrides, "visibilityoption0")}
+          children="Normal"
+          value="NORMAL"
+          {...getOverrideProps(overrides, "leveloption0")}
         ></option>
         <option
-          children="Public"
-          value="PUBLIC"
-          {...getOverrideProps(overrides, "visibilityoption1")}
+          children="Info"
+          value="INFO"
+          {...getOverrideProps(overrides, "leveloption1")}
         ></option>
         <option
-          children="Archived"
-          value="ARCHIVED"
-          {...getOverrideProps(overrides, "visibilityoption2")}
+          children="Success"
+          value="SUCCESS"
+          {...getOverrideProps(overrides, "leveloption2")}
+        ></option>
+        <option
+          children="Warning"
+          value="WARNING"
+          {...getOverrideProps(overrides, "leveloption3")}
+        ></option>
+        <option
+          children="Error"
+          value="ERROR"
+          {...getOverrideProps(overrides, "leveloption4")}
         ></option>
       </SelectField>
       <TextField
-        label="Name"
-        isRequired={true}
-        isReadOnly={false}
-        value={name}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              username,
-              visibility,
-              name: value,
-              searchName,
-              tagline,
-              about,
-            };
-            const result = onChange(modelFields);
-            value = result?.name ?? value;
-          }
-          if (errors.name?.hasError) {
-            runValidationTasks("name", value);
-          }
-          setName(value);
-        }}
-        onBlur={() => runValidationTasks("name", name)}
-        errorMessage={errors.name?.errorMessage}
-        hasError={errors.name?.hasError}
-        {...getOverrideProps(overrides, "name")}
-      ></TextField>
-      <TextField
-        label="Search name"
-        isRequired={true}
-        isReadOnly={false}
-        value={searchName}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              username,
-              visibility,
-              name,
-              searchName: value,
-              tagline,
-              about,
-            };
-            const result = onChange(modelFields);
-            value = result?.searchName ?? value;
-          }
-          if (errors.searchName?.hasError) {
-            runValidationTasks("searchName", value);
-          }
-          setSearchName(value);
-        }}
-        onBlur={() => runValidationTasks("searchName", searchName)}
-        errorMessage={errors.searchName?.errorMessage}
-        hasError={errors.searchName?.hasError}
-        {...getOverrideProps(overrides, "searchName")}
-      ></TextField>
-      <TextField
-        label="Tagline"
+        label="Displayed at"
         isRequired={false}
         isReadOnly={false}
-        value={tagline}
+        type="datetime-local"
+        value={displayedAt && convertToLocal(new Date(displayedAt))}
         onChange={(e) => {
-          let { value } = e.target;
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
               username,
-              visibility,
-              name,
-              searchName,
-              tagline: value,
-              about,
+              message,
+              level,
+              displayedAt: value,
+              heading,
             };
             const result = onChange(modelFields);
-            value = result?.tagline ?? value;
+            value = result?.displayedAt ?? value;
           }
-          if (errors.tagline?.hasError) {
-            runValidationTasks("tagline", value);
+          if (errors.displayedAt?.hasError) {
+            runValidationTasks("displayedAt", value);
           }
-          setTagline(value);
+          setDisplayedAt(value);
         }}
-        onBlur={() => runValidationTasks("tagline", tagline)}
-        errorMessage={errors.tagline?.errorMessage}
-        hasError={errors.tagline?.hasError}
-        {...getOverrideProps(overrides, "tagline")}
+        onBlur={() => runValidationTasks("displayedAt", displayedAt)}
+        errorMessage={errors.displayedAt?.errorMessage}
+        hasError={errors.displayedAt?.hasError}
+        {...getOverrideProps(overrides, "displayedAt")}
       ></TextField>
       <TextField
-        label="About"
+        label="Heading"
         isRequired={false}
         isReadOnly={false}
-        value={about}
+        value={heading}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               username,
-              visibility,
-              name,
-              searchName,
-              tagline,
-              about: value,
+              message,
+              level,
+              displayedAt,
+              heading: value,
             };
             const result = onChange(modelFields);
-            value = result?.about ?? value;
+            value = result?.heading ?? value;
           }
-          if (errors.about?.hasError) {
-            runValidationTasks("about", value);
+          if (errors.heading?.hasError) {
+            runValidationTasks("heading", value);
           }
-          setAbout(value);
+          setHeading(value);
         }}
-        onBlur={() => runValidationTasks("about", about)}
-        errorMessage={errors.about?.errorMessage}
-        hasError={errors.about?.hasError}
-        {...getOverrideProps(overrides, "about")}
+        onBlur={() => runValidationTasks("heading", heading)}
+        errorMessage={errors.heading?.errorMessage}
+        hasError={errors.heading?.hasError}
+        {...getOverrideProps(overrides, "heading")}
       ></TextField>
       <Flex
         justifyContent="space-between"
@@ -353,7 +346,7 @@ export default function UserProfileUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || userProfile)}
+          isDisabled={!(idProp || userNotification)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -365,7 +358,7 @@ export default function UserProfileUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || userProfile) ||
+              !(idProp || userNotification) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}
