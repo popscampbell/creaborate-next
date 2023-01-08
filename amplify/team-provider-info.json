@@ -16,5 +16,26 @@
         "creaboratec85e260f": {}
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-creaborate-dev-151334-authRole",
+      "UnauthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-dev-151334-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-dev-151334-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-creaborate-dev-151334-deployment",
+      "UnauthRoleName": "amplify-creaborate-dev-151334-unauthRole",
+      "StackName": "amplify-creaborate-dev-151334",
+      "StackId": "arn:aws:cloudformation:us-west-2:546014678210:stack/amplify-creaborate-dev-151334/e93c8730-8ee0-11ed-9323-06f1689fc1ef",
+      "AmplifyAppId": "d18dzfbyyli844"
+    },
+    "categories": {
+      "auth": {
+        "creaboratec85e260f": {}
+      },
+      "api": {
+        "creaborate": {}
+      }
+    }
   }
 }

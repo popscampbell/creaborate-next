@@ -1,10 +1,7 @@
-import { Authenticator, defaultDarkModeOverride, Divider, Flex, ThemeProvider, useTheme } from "@aws-amplify/ui-react"
+import { Authenticator, defaultDarkModeOverride, Flex, ThemeProvider, useTheme } from "@aws-amplify/ui-react"
 import AppBar from "./AppBar"
 import Footer from "./Footer"
 import React from "react"
-import { Amplify, Auth } from "aws-amplify"
-import awsconfig from "../src/aws-exports"
-import "@aws-amplify/ui-react/styles.css"
 
 export default function Layout(props: { children: any }) {
   const { tokens } = useTheme()
@@ -13,9 +10,6 @@ export default function Layout(props: { children: any }) {
     name: "creaborate-theme",
     overrides: [defaultDarkModeOverride]
   }
-
-  Amplify.configure(awsconfig)
-  Auth.configure(awsconfig)
 
   return (
     <ThemeProvider theme={appTheme} colorMode={"system"}>

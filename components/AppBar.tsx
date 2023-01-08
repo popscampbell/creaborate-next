@@ -1,12 +1,15 @@
 import {
   Flex,
   Text,
+  useAuthenticator,
   useTheme
 } from "@aws-amplify/ui-react"
 import Link from "next/link"
 
 export default function AppBar() {
   const { tokens } = useTheme()
+
+  const { user } = useAuthenticator()
 
   return (
     <Flex
@@ -25,7 +28,7 @@ export default function AppBar() {
       </Flex>
 
       <Flex grow={1} justifyContent="center">
-        Hey
+        <Link href="/UserProfile">User Profile</Link>
       </Flex>
 
       <Flex
@@ -33,7 +36,7 @@ export default function AppBar() {
         alignItems="baseline"
         columnGap={tokens.space.xxxs}
       >
-        Hi
+        {user && user.username}
       </Flex>
     </Flex>
   )

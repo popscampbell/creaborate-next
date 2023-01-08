@@ -5,3 +5,16 @@ type Post
   title: String!
   content: String!
 }
+
+type UserProfile @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  userId: ID!
+  visibility: UserProfileVisibility!
+  name: String!
+}
+
+enum UserProfileVisibility {
+  PRIVATE
+  PUBLIC
+  ARCHIVED
+}
