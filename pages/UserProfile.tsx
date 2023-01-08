@@ -13,7 +13,7 @@ export default function UserProfilePage() {
   return (
     <Page>
       <Head>
-        <title>Creaborate - {user?.username}'s profile</title>
+        <title>Creaborate - {user?.username}&apos;s profile</title>
         <meta name="description" content="Create something together." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
