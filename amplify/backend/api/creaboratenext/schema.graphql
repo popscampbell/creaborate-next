@@ -1,6 +1,8 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
 type UserProfile @model @auth(rules: [{ allow: public }]) {
   id: ID!
   username: String!
@@ -87,6 +89,7 @@ type Team @model @auth(rules: [{ allow: public }]) {
   description: String!
   teamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
   invitations: [TeamInvitation] @hasMany(indexName: "byTeam", fields: ["id"])
+  tasks: [Task] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
 enum TeamType {
@@ -107,6 +110,7 @@ type TeamMember @model @auth(rules: [{ allow: public }]) {
   teamId: ID! @index(name: "byTeam")
   username: String!
   role: TeamMemberRole!
+  team: Team @belongsTo(fields: ["teamId"])
 }
 
 enum TeamMemberRole {
@@ -124,6 +128,7 @@ type TeamInvitation @model @auth(rules: [{ allow: public }]) {
   invitedByUsername: String
   responseDateTime: AWSDateTime
   responseComment: String
+  team: Team @belongsTo(fields: ["teamId"])
 }
 
 enum TeamInvitationStatus {
@@ -148,6 +153,7 @@ type Task @model @auth(rules: [{ allow: public }]) {
   comments: [TaskComment] @hasMany(indexName: "byTask", fields: ["id"])
   ownerUsername: String
   startDate: AWSDate
+  team: Team @belongsTo(fields: ["teamId"])
 }
 
 enum TaskStatus {
@@ -166,6 +172,7 @@ type TaskComment @model @auth(rules: [{ allow: public }]) {
   id: ID!
   taskId: ID! @index(name: "byTask")
   comment: Comment!
+  task: Task @belongsTo(fields: ["taskId"])
 }
 
 type Comment {

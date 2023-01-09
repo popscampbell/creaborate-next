@@ -1,9 +1,4 @@
-import {
-  Flex,
-  Text,
-  useAuthenticator,
-  useTheme
-} from "@aws-amplify/ui-react"
+import { Flex, Text, useAuthenticator, useTheme } from "@aws-amplify/ui-react"
 import Link from "next/link"
 
 export default function AppBar() {
@@ -23,20 +18,18 @@ export default function AppBar() {
         <Text variation="primary" fontSize="xl">
           <Link href="/">
             Creaborate<sup style={{ fontSize: "small" }}>&reg;</sup>
-            </Link>
-          </Text>
+          </Link>
+        </Text>
       </Flex>
 
-      <Flex grow={1} justifyContent="center">
-        <Link href="/UserProfile">User Profile</Link>
-      </Flex>
+      <Flex grow={1} justifyContent="center"></Flex>
 
       <Flex
         justifyContent="flex-end"
         alignItems="baseline"
         columnGap={tokens.space.xxxs}
       >
-        {user && user.username}
+        <Link href="/UserProfile">{user && user.username}</Link>
       </Flex>
     </Flex>
   )

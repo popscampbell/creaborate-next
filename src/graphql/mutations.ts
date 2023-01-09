@@ -9,7 +9,7 @@ export const createUserProfile = /* GraphQL */ `
   ) {
     createUserProfile(input: $input, condition: $condition) {
       id
-      userId
+      username
       visibility
       name
       searchName
@@ -48,23 +48,6 @@ export const createUserProfile = /* GraphQL */ `
           _deleted
           _lastChangedAt
           userSkillSkillId
-        }
-        nextToken
-        startedAt
-      }
-      notifications {
-        items {
-          id
-          userProfileId
-          message
-          level
-          displayedAt
-          heading
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
         }
         nextToken
         startedAt
@@ -84,7 +67,7 @@ export const updateUserProfile = /* GraphQL */ `
   ) {
     updateUserProfile(input: $input, condition: $condition) {
       id
-      userId
+      username
       visibility
       name
       searchName
@@ -123,23 +106,6 @@ export const updateUserProfile = /* GraphQL */ `
           _deleted
           _lastChangedAt
           userSkillSkillId
-        }
-        nextToken
-        startedAt
-      }
-      notifications {
-        items {
-          id
-          userProfileId
-          message
-          level
-          displayedAt
-          heading
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
         }
         nextToken
         startedAt
@@ -159,7 +125,7 @@ export const deleteUserProfile = /* GraphQL */ `
   ) {
     deleteUserProfile(input: $input, condition: $condition) {
       id
-      userId
+      username
       visibility
       name
       searchName
@@ -202,23 +168,6 @@ export const deleteUserProfile = /* GraphQL */ `
         nextToken
         startedAt
       }
-      notifications {
-        items {
-          id
-          userProfileId
-          message
-          level
-          displayedAt
-          heading
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-        }
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -234,7 +183,7 @@ export const createUserImage = /* GraphQL */ `
   ) {
     createUserImage(input: $input, condition: $condition) {
       id
-      userProfileId
+      username
       image {
         storageKey
         alt
@@ -259,7 +208,7 @@ export const updateUserImage = /* GraphQL */ `
   ) {
     updateUserImage(input: $input, condition: $condition) {
       id
-      userProfileId
+      username
       image {
         storageKey
         alt
@@ -284,7 +233,7 @@ export const deleteUserImage = /* GraphQL */ `
   ) {
     deleteUserImage(input: $input, condition: $condition) {
       id
-      userProfileId
+      username
       image {
         storageKey
         alt
@@ -573,7 +522,7 @@ export const createUserNotification = /* GraphQL */ `
   ) {
     createUserNotification(input: $input, condition: $condition) {
       id
-      userProfileId
+      username
       message
       level
       displayedAt
@@ -593,7 +542,7 @@ export const updateUserNotification = /* GraphQL */ `
   ) {
     updateUserNotification(input: $input, condition: $condition) {
       id
-      userProfileId
+      username
       message
       level
       displayedAt
@@ -613,7 +562,7 @@ export const deleteUserNotification = /* GraphQL */ `
   ) {
     deleteUserNotification(input: $input, condition: $condition) {
       id
-      userProfileId
+      username
       message
       level
       displayedAt
@@ -643,13 +592,13 @@ export const createTeam = /* GraphQL */ `
         items {
           id
           teamId
+          username
           role
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          teamMemberUserProfileId
         }
         nextToken
         startedAt
@@ -660,7 +609,9 @@ export const createTeam = /* GraphQL */ `
           teamId
           role
           status
+          username
           externalEmail
+          invitedByUsername
           responseDateTime
           responseComment
           createdAt
@@ -668,8 +619,30 @@ export const createTeam = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          teamInvitationUserProfileId
-          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      tasks {
+        items {
+          id
+          teamId
+          name
+          searchName
+          description
+          searchDescription
+          dueDate
+          status
+          priority
+          completedByUsername
+          completedDate
+          ownerUsername
+          startDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
         startedAt
@@ -699,13 +672,13 @@ export const updateTeam = /* GraphQL */ `
         items {
           id
           teamId
+          username
           role
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          teamMemberUserProfileId
         }
         nextToken
         startedAt
@@ -716,7 +689,9 @@ export const updateTeam = /* GraphQL */ `
           teamId
           role
           status
+          username
           externalEmail
+          invitedByUsername
           responseDateTime
           responseComment
           createdAt
@@ -724,8 +699,30 @@ export const updateTeam = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          teamInvitationUserProfileId
-          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      tasks {
+        items {
+          id
+          teamId
+          name
+          searchName
+          description
+          searchDescription
+          dueDate
+          status
+          priority
+          completedByUsername
+          completedDate
+          ownerUsername
+          startDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
         startedAt
@@ -755,13 +752,13 @@ export const deleteTeam = /* GraphQL */ `
         items {
           id
           teamId
+          username
           role
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
-          teamMemberUserProfileId
         }
         nextToken
         startedAt
@@ -772,7 +769,9 @@ export const deleteTeam = /* GraphQL */ `
           teamId
           role
           status
+          username
           externalEmail
+          invitedByUsername
           responseDateTime
           responseComment
           createdAt
@@ -780,8 +779,30 @@ export const deleteTeam = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          teamInvitationUserProfileId
-          teamInvitationInvitedByUserId
+        }
+        nextToken
+        startedAt
+      }
+      tasks {
+        items {
+          id
+          teamId
+          name
+          searchName
+          description
+          searchDescription
+          dueDate
+          status
+          priority
+          completedByUsername
+          completedDate
+          ownerUsername
+          startDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
         startedAt
@@ -802,32 +823,25 @@ export const createTeamMember = /* GraphQL */ `
     createTeamMember(input: $input, condition: $condition) {
       id
       teamId
-      userProfile {
+      username
+      role
+      team {
         id
-        userId
-        visibility
         name
         searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
           nextToken
           startedAt
         }
-        skills {
+        invitations {
           nextToken
           startedAt
         }
-        notifications {
+        tasks {
           nextToken
           startedAt
         }
@@ -837,13 +851,11 @@ export const createTeamMember = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      role
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamMemberUserProfileId
     }
   }
 `;
@@ -855,32 +867,25 @@ export const updateTeamMember = /* GraphQL */ `
     updateTeamMember(input: $input, condition: $condition) {
       id
       teamId
-      userProfile {
+      username
+      role
+      team {
         id
-        userId
-        visibility
         name
         searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
           nextToken
           startedAt
         }
-        skills {
+        invitations {
           nextToken
           startedAt
         }
-        notifications {
+        tasks {
           nextToken
           startedAt
         }
@@ -890,13 +895,11 @@ export const updateTeamMember = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      role
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamMemberUserProfileId
     }
   }
 `;
@@ -908,32 +911,25 @@ export const deleteTeamMember = /* GraphQL */ `
     deleteTeamMember(input: $input, condition: $condition) {
       id
       teamId
-      userProfile {
+      username
+      role
+      team {
         id
-        userId
-        visibility
         name
         searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
           nextToken
           startedAt
         }
-        skills {
+        invitations {
           nextToken
           startedAt
         }
-        notifications {
+        tasks {
           nextToken
           startedAt
         }
@@ -943,13 +939,11 @@ export const deleteTeamMember = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      role
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamMemberUserProfileId
     }
   }
 `;
@@ -963,86 +957,42 @@ export const createTeamInvitation = /* GraphQL */ `
       teamId
       role
       status
-      userProfile {
-        id
-        userId
-        visibility
-        name
-        searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
-          nextToken
-          startedAt
-        }
-        skills {
-          nextToken
-          startedAt
-        }
-        notifications {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      username
       externalEmail
-      invitedByUser {
-        id
-        userId
-        visibility
-        name
-        searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
-          nextToken
-          startedAt
-        }
-        skills {
-          nextToken
-          startedAt
-        }
-        notifications {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      invitedByUsername
       responseDateTime
       responseComment
+      team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        tasks {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamInvitationUserProfileId
-      teamInvitationInvitedByUserId
     }
   }
 `;
@@ -1056,86 +1006,42 @@ export const updateTeamInvitation = /* GraphQL */ `
       teamId
       role
       status
-      userProfile {
-        id
-        userId
-        visibility
-        name
-        searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
-          nextToken
-          startedAt
-        }
-        skills {
-          nextToken
-          startedAt
-        }
-        notifications {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      username
       externalEmail
-      invitedByUser {
-        id
-        userId
-        visibility
-        name
-        searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
-          nextToken
-          startedAt
-        }
-        skills {
-          nextToken
-          startedAt
-        }
-        notifications {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      invitedByUsername
       responseDateTime
       responseComment
+      team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        tasks {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamInvitationUserProfileId
-      teamInvitationInvitedByUserId
     }
   }
 `;
@@ -1149,86 +1055,417 @@ export const deleteTeamInvitation = /* GraphQL */ `
       teamId
       role
       status
-      userProfile {
-        id
-        userId
-        visibility
-        name
-        searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
-          nextToken
-          startedAt
-        }
-        skills {
-          nextToken
-          startedAt
-        }
-        notifications {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      username
       externalEmail
-      invitedByUser {
-        id
-        userId
-        visibility
-        name
-        searchName
-        profileImage {
-          storageKey
-          alt
-          searchAlt
-          caption
-          searchCaption
-          detail
-          searchDetail
-        }
-        tagline
-        about
-        interests {
-          nextToken
-          startedAt
-        }
-        skills {
-          nextToken
-          startedAt
-        }
-        notifications {
-          nextToken
-          startedAt
-        }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
+      invitedByUsername
       responseDateTime
       responseComment
+      team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        tasks {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamInvitationUserProfileId
-      teamInvitationInvitedByUserId
+    }
+  }
+`;
+export const createTask = /* GraphQL */ `
+  mutation CreateTask(
+    $input: CreateTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
+    createTask(input: $input, condition: $condition) {
+      id
+      teamId
+      name
+      searchName
+      description
+      searchDescription
+      dueDate
+      status
+      priority
+      completedByUsername
+      completedDate
+      comments {
+        items {
+          id
+          taskId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ownerUsername
+      startDate
+      team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        tasks {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTask = /* GraphQL */ `
+  mutation UpdateTask(
+    $input: UpdateTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
+    updateTask(input: $input, condition: $condition) {
+      id
+      teamId
+      name
+      searchName
+      description
+      searchDescription
+      dueDate
+      status
+      priority
+      completedByUsername
+      completedDate
+      comments {
+        items {
+          id
+          taskId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ownerUsername
+      startDate
+      team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        tasks {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTask = /* GraphQL */ `
+  mutation DeleteTask(
+    $input: DeleteTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
+    deleteTask(input: $input, condition: $condition) {
+      id
+      teamId
+      name
+      searchName
+      description
+      searchDescription
+      dueDate
+      status
+      priority
+      completedByUsername
+      completedDate
+      comments {
+        items {
+          id
+          taskId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ownerUsername
+      startDate
+      team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        teamMembers {
+          nextToken
+          startedAt
+        }
+        invitations {
+          nextToken
+          startedAt
+        }
+        tasks {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTaskComment = /* GraphQL */ `
+  mutation CreateTaskComment(
+    $input: CreateTaskCommentInput!
+    $condition: ModelTaskCommentConditionInput
+  ) {
+    createTaskComment(input: $input, condition: $condition) {
+      id
+      taskId
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      task {
+        id
+        teamId
+        name
+        searchName
+        description
+        searchDescription
+        dueDate
+        status
+        priority
+        completedByUsername
+        completedDate
+        comments {
+          nextToken
+          startedAt
+        }
+        ownerUsername
+        startDate
+        team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTaskComment = /* GraphQL */ `
+  mutation UpdateTaskComment(
+    $input: UpdateTaskCommentInput!
+    $condition: ModelTaskCommentConditionInput
+  ) {
+    updateTaskComment(input: $input, condition: $condition) {
+      id
+      taskId
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      task {
+        id
+        teamId
+        name
+        searchName
+        description
+        searchDescription
+        dueDate
+        status
+        priority
+        completedByUsername
+        completedDate
+        comments {
+          nextToken
+          startedAt
+        }
+        ownerUsername
+        startDate
+        team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTaskComment = /* GraphQL */ `
+  mutation DeleteTaskComment(
+    $input: DeleteTaskCommentInput!
+    $condition: ModelTaskCommentConditionInput
+  ) {
+    deleteTaskComment(input: $input, condition: $condition) {
+      id
+      taskId
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      task {
+        id
+        teamId
+        name
+        searchName
+        description
+        searchDescription
+        dueDate
+        status
+        priority
+        completedByUsername
+        completedDate
+        comments {
+          nextToken
+          startedAt
+        }
+        ownerUsername
+        startDate
+        team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;

@@ -10,7 +10,9 @@ import {
   Button,
   Flex,
   Grid,
-  SelectField,
+  Radio,
+  RadioGroupField,
+  TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
@@ -23,6 +25,7 @@ export default function UserProfileCreateForm(props) {
     onSuccess,
     onError,
     onSubmit,
+    onCancel,
     onValidate,
     onChange,
     overrides,
@@ -165,11 +168,11 @@ export default function UserProfileCreateForm(props) {
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, "username")}
       ></TextField>
-      <SelectField
+      <RadioGroupField
         label="Visibility"
-        placeholder="Please select an option"
-        isDisabled={false}
-        value={visibility}
+        name="visibility"
+        isReadOnly={false}
+        isRequired={true}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -194,22 +197,22 @@ export default function UserProfileCreateForm(props) {
         hasError={errors.visibility?.hasError}
         {...getOverrideProps(overrides, "visibility")}
       >
-        <option
+        <Radio
           children="Private"
           value="PRIVATE"
-          {...getOverrideProps(overrides, "visibilityoption0")}
-        ></option>
-        <option
+          {...getOverrideProps(overrides, "visibilityRadio0")}
+        ></Radio>
+        <Radio
           children="Public"
           value="PUBLIC"
-          {...getOverrideProps(overrides, "visibilityoption1")}
-        ></option>
-        <option
+          {...getOverrideProps(overrides, "visibilityRadio1")}
+        ></Radio>
+        <Radio
           children="Archived"
           value="ARCHIVED"
-          {...getOverrideProps(overrides, "visibilityoption2")}
-        ></option>
-      </SelectField>
+          {...getOverrideProps(overrides, "visibilityRadio2")}
+        ></Radio>
+      </RadioGroupField>
       <TextField
         label="Name"
         isRequired={true}
@@ -297,11 +300,10 @@ export default function UserProfileCreateForm(props) {
         hasError={errors.tagline?.hasError}
         {...getOverrideProps(overrides, "tagline")}
       ></TextField>
-      <TextField
+      <TextAreaField
         label="About"
         isRequired={false}
         isReadOnly={false}
-        value={about}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -325,7 +327,7 @@ export default function UserProfileCreateForm(props) {
         errorMessage={errors.about?.errorMessage}
         hasError={errors.about?.hasError}
         {...getOverrideProps(overrides, "about")}
-      ></TextField>
+      ></TextAreaField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -343,6 +345,14 @@ export default function UserProfileCreateForm(props) {
           gap="15px"
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
+          <Button
+            children="Cancel"
+            type="button"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, "CancelButton")}
+          ></Button>
           <Button
             children="Submit"
             type="submit"

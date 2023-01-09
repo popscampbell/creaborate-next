@@ -1,19 +1,29 @@
-import { Flex, Heading, useTheme, ButtonGroup } from "@aws-amplify/ui-react"
+import {
+  Flex,
+  Heading,
+  useTheme,
+  ButtonGroup,
+  Text,
+} from "@aws-amplify/ui-react"
 import React from "react"
 
 export default function PageHeader(props: {
   title: string
+  subtitle?: string
   actions?: React.ReactNode
 }) {
-  const { title, actions } = props
+  const { title, subtitle, actions } = props
   const { tokens } = useTheme()
 
   return (
-    <Flex marginBottom={tokens.space.large} alignItems="baseline">
-      <Heading grow={1} marginBottom={20} level={1}>
-        {title}
-      </Heading>
-      <ButtonGroup>{actions}</ButtonGroup>
-    </Flex>
+    <>
+      <Flex marginBottom={tokens.space.zero} alignItems="baseline">
+        <Heading grow={1} paddingBlock={tokens.space.zero} level={1}>
+          {title}
+        </Heading>
+        <ButtonGroup>{actions}</ButtonGroup>
+      </Flex>
+      <Text fontSize={tokens.fontSizes.large}>{subtitle}</Text>
+    </>
   )
 }

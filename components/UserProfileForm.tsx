@@ -4,9 +4,9 @@ import {
   Flex,
   SwitchField,
   TextAreaField,
-  TextField
+  TextField,
 } from "@aws-amplify/ui-react"
-import { UserProfile, UserProfileVisibility } from "../src/models"
+import { UserProfile, UserProfileVisibility } from "../models"
 import React from "react"
 import { DataStore } from "aws-amplify"
 
@@ -21,16 +21,17 @@ export default function UserProfileForm(props: { userProfile: UserProfile }) {
   const [about, setAbout] = React.useState(userProfile.about)
 
   function handleSave() {
-    DataStore.save(userProfile.id
-      ? UserProfile.copyOf(userProfile, copy => {
-        copy.visibility = visibility
-        copy.name = name
-        copy.searchName = name.toLowerCase()
-        copy.tagline = tagline
-        copy.about = about
-      })
-      : userProfile
-      ).then(() => alert("Saved"))
+    DataStore.save(
+      userProfile.id
+        ? UserProfile.copyOf(userProfile, (copy) => {
+            copy.visibility = visibility
+            copy.name = name
+            copy.searchName = name.toLowerCase()
+            copy.tagline = tagline
+            copy.about = about
+          })
+        : userProfile
+    ).then(() => alert("Saved"))
   }
 
   return (

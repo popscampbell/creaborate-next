@@ -1,9 +1,10 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import Head from "next/head"
+import UserProfileCreateForm from "components/forms/UserProfileCreateForm"
+import UserProfileUpdateForm from "components/forms/UserProfileUpdateForm"
 import Layout from "../components/Layout"
 import Page from "../components/Page"
 import PageHeader from "../components/PageHeader"
-import UserProfileForm from "../components/UserProfileForm"
 import useNewOrExistingUserProfile from "../hooks/useNewOrExistingUserProfile"
 
 export default function UserProfilePage() {
@@ -20,7 +21,11 @@ export default function UserProfilePage() {
       </Head>
       <Layout>
         <PageHeader title={`${user?.username}'s user profile`}></PageHeader>
-        {userProfile && <UserProfileForm userProfile={userProfile} />}
+        {userProfile?.id ? (
+          <UserProfileUpdateForm userProfile={userProfile} />
+        ) : (
+          <UserProfileCreateForm />
+        )}
       </Layout>
     </Page>
   )
