@@ -1,5 +1,5 @@
 import { Auth, DataStore } from "aws-amplify"
-import { UserProfile, UserProfileVisibility } from "models"
+import { UserProfile, UserProfileVisibility } from "src/models"
 import React from "react"
 
 export default function useNewOrExistingUserProfile() {
@@ -14,11 +14,11 @@ export default function useNewOrExistingUserProfile() {
           results?.length
             ? results[0]
             : new UserProfile({
-                username: user.username,
-                name: "",
-                searchName: "",
-                visibility: UserProfileVisibility.PUBLIC,
-              })
+              username: user.username,
+              name: "",
+              searchName: "",
+              visibility: UserProfileVisibility.PUBLIC,
+            })
         )
         .then((profile) => setUserProfile(profile))
     )

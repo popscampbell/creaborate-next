@@ -3,11 +3,12 @@ import Layout from "components/Layout"
 import Page from "components/Page"
 import PageHeader from "components/PageHeader"
 import { useRouter } from "next/router"
-import TeamUpdateForm from "components/forms/TeamUpdateForm"
+import TeamUpdateForm from "components/team/TeamUpdateForm"
 import useTeam from "hooks/useTeam"
 import React from "react"
-import useTeamMembers from "hooks/useTeamMembers"
+import { useTeamMembersByTeam } from "hooks/useTeamMembers"
 import {
+  Alert,
   Button,
   ButtonGroup,
   Card,
@@ -16,25 +17,69 @@ import {
   Text,
   useTheme,
 } from "@aws-amplify/ui-react"
-import { TeamMemberRole } from "models"
+import { Team, TeamMemberRole } from "src/models"
 import { MdAdd, MdLocalPolice, MdSettings } from "react-icons/md"
 import PageSection from "components/PageSection"
+import { Snackbar } from "@mui/material"
+
+type SnackbarProps = { open: boolean, message: string }
 
 export default function TeamPage() {
   const { tokens } = useTheme()
   const router = useRouter()
   const { teamId } = router.query
-  const team = useTeam(teamId as string)
-  const teamMembers = useTeamMembers(teamId as string)
+  const team = useTeam(teamId as string, true)
 
   const [showForm, setShowForm] = React.useState(false)
+  const [snackbarState, setSnackbarState] = React.useState<SnackbarProps>({ open: false, message: ""})
 
   function handleSettingsClick() {
     setShowForm(true)
   }
 
-  function handleUpdateFormSuccess() {
+  function handleSnackbarClose() {
+    setSnackbarState({ open: false, message: ""})
+  }
+
+  function handleUpdateSuccess() {
+    setSnackbarState({ open: true, message: "Saved" })
     setShowForm(false)
+  }
+
+  function handleCancel() {
+    setShowForm(false)
+  }
+
+  function TeamMemberSection(props: { team: Team }) {
+    const { team } = props
+
+    const teamMembers = useTeamMembersByTeam(team)
+
+    return (
+      <Collection
+        type="list"
+        items={teamMembers || []}
+        direction="row"
+        wrap="wrap"
+      >
+        {(item) => (
+          <Card
+            key={item.id}
+            variation="outlined"
+            borderRadius={tokens.radii.large}
+            paddingInline={tokens.space.small}
+            paddingBlock={tokens.space.xs}
+          >
+            <Flex columnGap={tokens.space.xxxs} alignItems="center">
+              {item.role === TeamMemberRole.ADMINISTRATOR && (
+                <MdLocalPolice />
+              )}
+              <Text>{item.name}</Text>
+            </Flex>
+          </Card>
+        )}
+      </Collection>
+    )
   }
 
   return (
@@ -59,8 +104,8 @@ export default function TeamPage() {
           {showForm && (
             <TeamUpdateForm
               team={team}
-              onSuccess={handleUpdateFormSuccess}
-              onCancel={handleUpdateFormSuccess}
+              onSuccess={handleUpdateSuccess}
+              onCancel={handleCancel}
             />
           )}
 
@@ -74,33 +119,12 @@ export default function TeamPage() {
               </ButtonGroup>
             }
           >
-            {teamMembers?.length && (
-              <Collection
-                type="list"
-                items={teamMembers}
-                direction="row"
-                wrap="wrap"
-              >
-                {(item) => (
-                  <Card
-                    key={item.id}
-                    variation="outlined"
-                    borderRadius={tokens.radii.large}
-                    paddingInline={tokens.space.small}
-                    paddingBlock={tokens.space.xs}
-                  >
-                    <Flex columnGap={tokens.space.xxxs} alignItems="center">
-                      {item.role === TeamMemberRole.ADMINISTRATOR && (
-                        <MdLocalPolice />
-                      )}
-                      <Text>{item.name}</Text>
-                    </Flex>
-                  </Card>
-                )}
-              </Collection>
-            )}
+            {team && <TeamMemberSection team={team} />}
           </PageSection>
         </Page>
+        <Snackbar open={snackbarState.open} anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={6000} onClose={handleSnackbarClose}>
+          <Alert isDismissible onDismiss={handleSnackbarClose} variation="success">Saved</Alert>
+        </Snackbar>
       </Layout>
     </>
   )

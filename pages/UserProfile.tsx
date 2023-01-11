@@ -1,7 +1,6 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
-import Head from "next/head"
-import UserProfileCreateForm from "components/forms/UserProfileCreateForm"
-import UserProfileUpdateForm from "components/forms/UserProfileUpdateForm"
+import UserProfileCreateForm from "components/user/UserProfileCreateForm"
+import UserProfileUpdateForm from "components/user/UserProfileUpdateForm"
 import Layout from "../components/Layout"
 import Page from "../components/Page"
 import PageHeader from "../components/PageHeader"
@@ -12,13 +11,7 @@ export default function UserProfilePage() {
   const userProfile = useNewOrExistingUserProfile()
 
   return (
-    <Page>
-      <Head>
-        <title>Creaborate - {user?.username}&apos;s profile</title>
-        <meta name="description" content="Create something together." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Page title={`${user?.username}'s user profile`}>
       <Layout>
         <PageHeader title={`${user?.username}'s user profile`}></PageHeader>
         {userProfile?.id ? (

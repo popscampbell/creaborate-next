@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Divider,
   Flex,
   Heading,
@@ -71,9 +70,9 @@ export default function SummaryBar() {
         }
       >
         {teams?.length && teams.length > 0 ? (
-          teams.map((team) => (
-            <Link key={team.id} href="/team/[teamId]" as={`/team/${team.id}`}>
-              {team.name}
+          teams.map((team, index) => (
+            <Link key={team?.id || index} href="/team/[teamId]" as={`/team/${team?.id}`}>
+              {team?.name}
             </Link>
           ))
         ) : (

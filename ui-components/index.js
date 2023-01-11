@@ -15,3 +15,13 @@ export { default as UserNotificationCreateForm } from "./UserNotificationCreateF
 export { default as SkillCreateForm } from "./SkillCreateForm";
 export { default as InterestUpdateForm } from "./InterestUpdateForm";
 export { default as TeamCreateForm } from "./TeamCreateForm";
+export { default as LocationCreateForm } from "./LocationCreateForm";
+export { default as LocationUpdateForm } from "./LocationUpdateForm";
+export { default as EventCreateForm } from "./EventCreateForm";
+export { default as EventUpdateForm } from "./EventUpdateForm";
+export { default as VenueCreateForm } from "./VenueCreateForm";
+export { default as VenueUpdateForm } from "./VenueUpdateForm";
+export { default as AssetCreateForm } from "./AssetCreateForm";
+export { default as AssetUpdateForm } from "./AssetUpdateForm";
+export { default as ProductCreateForm } from "./ProductCreateForm";
+export { default as ProductUpdateForm } from "./ProductUpdateForm";

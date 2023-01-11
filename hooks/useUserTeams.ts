@@ -1,5 +1,5 @@
 import { Auth, DataStore } from "aws-amplify"
-import { Team, TeamMember } from "models"
+import { Team, TeamMember } from "src/models"
 import React from "react"
 
 export default function useUserTeams() {
@@ -10,8 +10,7 @@ export default function useUserTeams() {
       DataStore.query(TeamMember, (teamMember) =>
         teamMember.username.eq(user.username)
       ).then(async (results) =>
-        Promise.all(results.map((teamMember) => teamMember.team))
-          .then((results) => results.filter((result) => result !== undefined))
+        Promise.all(results.map((teamMember) => teamMember.Team))
           .then((results) => setTeams(results as Team[]))
       )
     })
