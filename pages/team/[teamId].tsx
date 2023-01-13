@@ -1,37 +1,35 @@
-import Head from "next/head"
-import Layout from "components/Layout"
-import Page from "components/Page"
-import PageHeader from "components/PageHeader"
-import { useRouter } from "next/router"
-import TeamUpdateForm from "components/team/TeamUpdateForm"
-import useTeam from "hooks/useTeam"
-import React from "react"
-import { TeamMemberWithName, useTeamMembersByTeam } from "hooks/useTeamMembers"
 import {
   Alert,
   Button,
   ButtonGroup,
-  Card,
   Collection,
   ComboBoxOption,
   Divider,
   Flex,
   Loader,
   Text,
-  useTheme,
-  View,
+  useTheme
 } from "@aws-amplify/ui-react"
-import { Team, TeamMember, TeamMemberRole } from "src/models"
-import { MdAdd, MdClose, MdLocalPolice, MdSettings } from "react-icons/md"
-import PageSection from "components/PageSection"
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from "@mui/material"
-import TeamMemberForm from "components/team/TeamMemberForm"
-import _ from "lodash"
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, SnackbarProps } from "@mui/material"
 import { DataStore } from "aws-amplify"
+import Layout from "components/Layout"
+import Page from "components/Page"
+import PageHeader from "components/PageHeader"
+import PageSection from "components/PageSection"
+import NewTaskDialog from "components/task/NewTaskDialog"
+import TasksTable from "components/task/TasksTable"
+import TeamMemberForm from "components/team/TeamMemberForm"
+import TeamMemberPill from "components/team/TeamMemberPill"
+import TeamUpdateForm from "components/team/TeamUpdateForm"
 import useCurrentUserTeamRole from "hooks/useCurrentUserTeamRole"
-import useTeamTasks from "components/team/useTeamTasks"
-
-type SnackbarProps = { open: boolean, message: string }
+import useTeam from "hooks/useTeam"
+import { TeamMemberWithName, useTeamMembersByTeam } from "hooks/useTeamMembers"
+import _ from "lodash"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import React from "react"
+import { MdAdd, MdSettings } from "react-icons/md"
+import { Team, TeamMember, TeamMemberRole } from "src/models"
 
 export default function TeamPage() {
   const { tokens } = useTheme()
@@ -61,7 +59,7 @@ export default function TeamPage() {
     setShowForm(false)
   }
 
-  function TeamMemberSection(props: { team: Team }) {
+  function TeamMembersSection(props: { team: Team }) {
     const { team } = props
 
     const teamMembers = useTeamMembersByTeam(team)
@@ -73,56 +71,34 @@ export default function TeamPage() {
       }
     }
 
-    return (
-      <Collection
-        type="list"
-        items={teamMembers ?? []}
-        direction="row"
-        wrap="wrap"
-        marginBottom={tokens.space.medium}
-      >
-        {(item) => (
-          <TeamMemberPill
-            teamMember={item}
-            isDismissable={role === TeamMemberRole.ADMINISTRATOR && item.role !== TeamMemberRole.ADMINISTRATOR}
-            onDismiss={handleDismissTeamMember} />
-        )}
-      </Collection>
-    )
-  }
-
-  function TeamMemberPill(props: {
-    teamMember: TeamMemberWithName
-    isDismissable?: boolean
-    onDismiss?: (item: TeamMemberWithName) => void
-  }) {
-    const { teamMember, isDismissable, onDismiss } = props
-
-    return (
-      <Card
-        key={teamMember.id}
-        variation="outlined"
-        borderRadius={tokens.radii.large}
-        paddingInline={tokens.space.small}
-        paddingBlock={tokens.space.xs}
-      >
-        <Flex columnGap={tokens.space.xxxs} alignItems="center">
-          {teamMember.role === TeamMemberRole.ADMINISTRATOR && (
-            <MdLocalPolice />
-          )}
-          <Text>{teamMember.name}</Text>
-          {isDismissable && (
-            <Button
-              onClick={() => onDismiss?.(teamMember)}
-              padding={tokens.space.zero}
-              marginLeft={tokens.space.xxxs}
-              variation="destructive">
-              <MdClose size={tokens.fontSizes.small.value} />
+    return teamMembers? (
+      <PageSection
+        heading="Members"
+        actions={
+          <ButtonGroup>
+            <Button onClick={handleOpenDialog} size="small" variation="link">
+              <MdAdd />
             </Button>
+          </ButtonGroup>
+        }
+      >
+        {team && <Collection
+          type="list"
+          items={teamMembers ?? []}
+          direction="row"
+          wrap="wrap"
+          marginBottom={tokens.space.medium}
+        >
+          {(item) => (
+            <TeamMemberPill
+              teamMember={item}
+              isDismissable={role === TeamMemberRole.ADMINISTRATOR && item.role !== TeamMemberRole.ADMINISTRATOR}
+              onDismiss={handleDismissTeamMember} />
           )}
-        </Flex>
-      </Card>
-    )
+        </Collection>}
+        <TeamMemberDialog onAdd={handleAddUsers}/>
+      </PageSection>
+    ) : <Loader/>
   }
 
   function TeamMemberDialog(props: {
@@ -197,37 +173,38 @@ export default function TeamPage() {
     }
   }
 
-  function TasksSection() {
-    const tasks = useTeamTasks(team?.id ?? "")
+  function TasksSection(props: { team: Team }) {
+    const { team } = props
+
+    const [dialogOpen, setDialogOpen] = React.useState(false)
 
     function handleAddTask() {
-      alert("Add a task!")
+      setDialogOpen(true)
+    }
+
+    function handleDialogCancel() {
+      setDialogOpen(false)
+    }
+
+    function handleDialogSaved() {
+      setDialogOpen(false)
+      setSnackbarState({ open: true, message: "Task created"})
     }
 
     return (
       <PageSection heading="Tasks" marginTop={24}
         actions={<ButtonGroup>
           <Button onClick={handleAddTask} size="small" variation="link">
-                  <MdAdd />
-                </Button>
+            <MdAdd />
+          </Button>
         </ButtonGroup>}>
-        <Flex>
-          {tasks && <Collection
-            type="grid"
-            items={tasks}
-            searchNoResultsFound="No tasks"
-          >
-            {task => (
-              <Text>{task.name}</Text>
-            )}
-          </Collection>}
-          {!tasks && <Loader/>}
-        </Flex>
+        <TasksTable teamId={team.id} />
+        <NewTaskDialog teamID={team.id} open={dialogOpen} onSaved={handleDialogSaved} onCancel={handleDialogCancel} />
       </PageSection>
     )
   }
 
-  return (
+  return team? (
     <>
       <Head>
         <title>Creaborate - {team?.name}</title>
@@ -255,30 +232,15 @@ export default function TeamPage() {
           )}
 
           <Divider />
-
-          <PageSection
-            heading="Members"
-            actions={
-              <ButtonGroup>
-                <Button onClick={handleOpenDialog} size="small" variation="link">
-                  <MdAdd />
-                </Button>
-              </ButtonGroup>
-            }
-          >
-            {team && <TeamMemberSection team={team} />}
-            <TeamMemberDialog onAdd={handleAddUsers}/>
-          </PageSection>
+          <TeamMembersSection team={team} />
+          <Divider />
+          <TasksSection team={team} />
         </Page>
-
-        <Divider />
-
-        <TasksSection />
 
         <Snackbar open={snackbarState.open} anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={6000} onClose={handleSnackbarClose}>
           <Alert isDismissible onDismiss={handleSnackbarClose} variation="success">Saved</Alert>
         </Snackbar>
       </Layout>
     </>
-  )
+  ) : <Loader/>
 }

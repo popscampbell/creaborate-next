@@ -5,7 +5,9 @@ import { Task } from "src/models"
 export default function useTeamTasks(teamId: string, subscribe?: boolean) {
   const [tasks, setTasks] = React.useState<Task[]>()
 
-  React.useEffect(() => {
+  function load() {
+    setTasks(undefined)
+
     if (teamId) {
       DataStore.query(Task, t => t.teamID.eq(teamId))
         .then(rows => {
@@ -18,10 +20,11 @@ export default function useTeamTasks(teamId: string, subscribe?: boolean) {
               })
           }
         })
-    } else {
-      setTasks(undefined)
     }
+  }
+  React.useEffect(() => {
+    load()
   }, [teamId])
 
-  return tasks
+  return { tasks, load }
 }
