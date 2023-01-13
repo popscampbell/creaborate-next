@@ -7,18 +7,24 @@ import {
   useTheme,
   VisuallyHidden,
 } from "@aws-amplify/ui-react"
-import useUserTeams from "hooks/useUserTeams"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { createTeam } from "features/teams/teamsSlice"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { MdAdd } from "react-icons/md"
 
 export default function SummaryBar() {
   const { tokens } = useTheme()
-  const teams = useUserTeams()
+  const teams = useAppSelector(state => state.teams.teams)
+  const dispatch = useAppDispatch()
   const router = useRouter()
 
   function handleAddTeam() {
-    router.push("/team/new")
+    // router.push("/team/new")
+    dispatch(createTeam({
+      name: "New team",
+      description: "New team description"
+    }))
   }
 
   function SummaryBarSection(props: {
@@ -55,7 +61,7 @@ export default function SummaryBar() {
       direction="column"
       width={200}
       paddingRight={tokens.space.medium}
-      style={{ borderRightStyle: "solid", borderRightWidth: "1px" }}
+      style={{ borderRightStyle: "solid", borderRightWidth: "1px", borderRightColor: tokens.colors.border.secondary.value }}
     >
       <VisuallyHidden>
         <Heading level={2}>Summary</Heading>

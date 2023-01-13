@@ -1,15 +1,15 @@
-import { Flex, Heading, useTheme } from "@aws-amplify/ui-react"
+import { FlexProps, Flex, Heading, useTheme } from "@aws-amplify/ui-react"
 
 export default function PageSection(props: {
   heading: string
   children: any
   actions?: any
-}) {
-  const { heading, children, actions } = props
+} & FlexProps) {
+  const { heading, children, actions, ...rest } = props
   const { tokens } = useTheme()
 
   return (
-    <Flex direction="column">
+    <Flex {...rest} direction="column">
       <Flex>
         <Heading
           level={2}

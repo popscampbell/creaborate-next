@@ -14,10 +14,22 @@ async function getTeamMemberWithName(teamMember: TeamMember) {
   return { ...teamMember, ...{ name: profile?.name || teamMember.username } }
 }
 
-export function useTeamMembersByTeam(team: Team) {
+export function useTeamMembersByTeam(team: Team, subscribe?: boolean) {
   const [teamMembers, setTeamMembers] = React.useState<TeamMemberWithName[]>()
 
   React.useEffect(() => {
+    DataStore.query(TeamMember, tm => tm.teamID.eq(team.id))
+      .then(async rows => Promise.all(rows.map(row => getTeamMemberWithName(row))))
+      .then(members => {
+        setTeamMembers(members)
+
+        if (subscribe) {
+          DataStore.observeQuery(TeamMember, tm => tm.teamID.eq(team.id))
+            .subscribe(async result => Promise.all(result.items.map(row => getTeamMemberWithName(row)))
+              .then(members => setTeamMembers(members)))
+        }
+      })
+
     if (team.TeamMembers) {
       team.TeamMembers
         .toArray()
@@ -38,16 +50,6 @@ export default function useTeamMembers(teamId: string) {
   const [teamMembers, setTeamMembers] = React.useState<TeamMemberWithName[]>()
 
   React.useEffect(() => {
-    async function getTeamMemberWithName(teamMember: TeamMember) {
-      const profile = (
-        await DataStore.query(UserProfile, (userProfile) =>
-          userProfile.username.eq(teamMember.username)
-        )
-      )[0]
-
-      return { ...teamMember, ...{ name: profile?.name || teamMember.username } }
-    }
-
     DataStore.query(Team, teamId).then(
       async (team) => {
         team &&
