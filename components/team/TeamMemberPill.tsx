@@ -1,6 +1,6 @@
 import { Text, useTheme } from "@aws-amplify/ui-react"
 import Pill from "components/Pill"
-import { TeamMemberWithName } from "hooks/useTeamMembers"
+import { TeamMemberWithName } from "features/teams/teamSlice"
 import { MdLocalPolice } from "react-icons/md"
 import { TeamMemberRole } from "src/models"
 

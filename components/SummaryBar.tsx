@@ -5,26 +5,21 @@ import {
   Heading,
   Text,
   useTheme,
-  VisuallyHidden,
+  VisuallyHidden
 } from "@aws-amplify/ui-react"
-import { useAppDispatch, useAppSelector } from "app/hooks"
-import { createTeam } from "features/teams/teamsSlice"
+import { useAppSelector } from "app/hooks"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { MdAdd } from "react-icons/md"
+import ProjectList from "./project/ProjectList"
 
 export default function SummaryBar() {
   const { tokens } = useTheme()
-  const teams = useAppSelector(state => state.teams.teams)
-  const dispatch = useAppDispatch()
+  const {team: teamState, user, context} = useAppSelector(state => state)
   const router = useRouter()
 
   function handleAddTeam() {
     // router.push("/team/new")
-    dispatch(createTeam({
-      name: "New team",
-      description: "New team description"
-    }))
   }
 
   function SummaryBarSection(props: {
@@ -75,9 +70,9 @@ export default function SummaryBar() {
           </Button>
         }
       >
-        {teams?.length && teams.length > 0 ? (
-          teams.map((team, index) => (
-            <Link key={team?.id || index} href="/team/[teamId]" as={`/team/${team?.id}`}>
+        {user.teams?.length && user.teams.length > 0 ? (
+          user.teams.map((team) => (
+            <Link key={team.id} href={`/team/${encodeURIComponent(team.id)}`}>
               {team?.name}
             </Link>
           ))
@@ -85,6 +80,14 @@ export default function SummaryBar() {
           <Text>No teams</Text>
         )}
       </SummaryBarSection>
+
+      {context.area === "Team" && teamState.team && (
+        <SummaryBarSection
+          heading="Team projects"
+        >
+          <ProjectList teamID={teamState.team.id} />
+        </SummaryBarSection>
+      )}
 
       <Divider />
     </Flex>

@@ -1,42 +1,38 @@
 import { DataStore } from "aws-amplify"
 import ItemDialog from "components/ItemDialog"
 import React from "react"
-import { Task, TaskPriority, TaskStatus } from "src/models"
-import TaskForm, { TaskFormInputs } from "./TaskForm"
+import { ProjectStatus, TeamProject } from "src/models"
+import TaskForm, { ProjectFormInputs } from "./ProjectForm"
 
 export default function NewTaskDialog(props: {
   teamID: string
   open: boolean
   onCancel: () => void
-  onSaved: (task: Task) => void
+  onSaved: (project: TeamProject) => void
 }) {
   const { open, onCancel, teamID, onSaved } = props
 
-  const [model, setModel] = React.useState<TaskFormInputs>({
+  const [model, setModel] = React.useState<ProjectFormInputs>({
     name: "",
-    status: TaskStatus.ACTIVE,
-    priority: TaskPriority.MEDIUM,
+    status: ProjectStatus.DRAFT,
     description: "",
-    dueDate: undefined,
     startDate: undefined,
-    ownerUsername: undefined,
-    completedByUsername: undefined,
-    completedDate: undefined,
+    endDate: undefined,
   })
 
-  function handleFormChanged(inputs: TaskFormInputs) {
+  function handleFormChanged(inputs: ProjectFormInputs) {
     setModel(inputs)
   }
 
   function handleSaved() {
-    DataStore.save(new Task({
+    DataStore.save(new TeamProject({
       ...model,
       ...{
         teamID,
         searchName: model.name.toLowerCase(),
         searchDescription: model.description?.toLowerCase() ?? ""
         }
-      })).then((task) => onSaved(task))
+      })).then((project) => onSaved(project))
   }
 
   return (

@@ -1,7 +1,7 @@
 import {
   Button,
   ButtonGroup,
-  Loader,
+  Placeholder,
   Table,
   TableBody,
   TableCell,
@@ -10,22 +10,38 @@ import {
   Text,
   useTheme
 } from "@aws-amplify/ui-react"
+import { useAppSelector } from "app/hooks"
 import { DataStore } from "aws-amplify"
-import useTeamTasks from "components/team/useTeamTasks"
+import React from "react"
 import { MdDelete, MdEdit } from "react-icons/md"
 import { Task } from "src/models"
+import EditTaskDialog from "./EditTaskDialog"
 
-export default function TasksTable(props: { teamId: string }) {
-  const { teamId } = props
+export default function TasksTable(props: {
+  onTaskSaved?: (task: Task) => void
+}) {
+  const { onTaskSaved } = props
 
-  const {tasks, load} = useTeamTasks(teamId)
+  const { tasks } = useAppSelector(state => state.team)
   const { tokens } = useTheme()
 
-  function editTask(task: Task) {}
+  const [selectedTask, setSelectedTask] = React.useState<Task>()
+
+  function editTask(task: Task) {
+    setSelectedTask(task)
+  }
+
+  function handleTaskSaved(task: Task) {
+    setSelectedTask(undefined)
+    onTaskSaved?.(task)
+  }
+
+  function handleTaskCanceled() {
+    setSelectedTask(undefined)
+  }
 
   function deleteTask(task: Task) {
     DataStore.delete(task)
-    load()
   }
 
   const statusCellWidth = 100
@@ -68,7 +84,13 @@ export default function TasksTable(props: { teamId: string }) {
             </TableRow>
           ))}
         </TableBody>
+        {selectedTask && <EditTaskDialog
+          open={selectedTask !== undefined}
+          task={selectedTask}
+          onSaved={handleTaskSaved}
+          onCancel={handleTaskCanceled}
+        />}
       </Table>
     ) : <Text>No tasks</Text>
-  ) : <Loader/>
+  ) : <Placeholder/>
 }

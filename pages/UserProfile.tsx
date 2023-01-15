@@ -1,18 +1,17 @@
-import { Alert, useAuthenticator } from "@aws-amplify/ui-react"
+import { Alert } from "@aws-amplify/ui-react"
 import { Snackbar } from "@mui/material"
+import { useAppSelector } from "app/hooks"
 import UserProfileCreateForm from "components/user/UserProfileCreateForm"
 import UserProfileUpdateForm from "components/user/UserProfileUpdateForm"
 import React from "react"
 import Layout from "../components/Layout"
 import Page from "../components/Page"
 import PageHeader from "../components/PageHeader"
-import useNewOrExistingUserProfile from "../hooks/useNewOrExistingUserProfile"
 
 type SnackbarProps = { open: boolean, message: string }
 
 export default function UserProfilePage() {
-  const { user } = useAuthenticator()
-  const userProfile = useNewOrExistingUserProfile()
+  const user = useAppSelector(state => state.user)
   const [snackbarState, setSnackbarState] = React.useState<SnackbarProps>({ open: false, message: ""})
 
   function handleSnackbarClose() {
@@ -24,18 +23,18 @@ export default function UserProfilePage() {
   }
 
   return (
-    <Page title={`${user?.username}'s user profile`}>
-      <Layout>
+    <Layout>
+      <Page title={`${user.username}'s user profile`} context="User">
         <PageHeader title={`${user?.username}'s user profile`}></PageHeader>
-        {userProfile?.id ? (
-          <UserProfileUpdateForm userProfile={userProfile} onSuccess={handleUpdateSuccess} />
+        {user.profile ? (
+          <UserProfileUpdateForm userProfile={user.profile} onSuccess={handleUpdateSuccess} />
         ) : (
           <UserProfileCreateForm />
         )}
         <Snackbar open={snackbarState.open} anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={6000} onClose={handleSnackbarClose}>
           <Alert isDismissible onDismiss={handleSnackbarClose} variation="success">Saved</Alert>
         </Snackbar>
-      </Layout>
-    </Page>
+      </Page>
+    </Layout>
   )
 }

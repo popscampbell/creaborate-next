@@ -13,8 +13,6 @@ export default function App({ Component, pageProps }: AppProps) {
   Auth.configure(awsexports)
   API.configure(awsexports)
 
-  store.loadData()
-
   return (
     <Authenticator.Provider>
       <StrictMode>

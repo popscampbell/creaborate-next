@@ -9,7 +9,6 @@ import {
 } from "@aws-amplify/ui-react"
 import { getOverrideProps } from "@aws-amplify/ui-react/internal"
 import { DataStore } from "aws-amplify"
-import { fetchTeams } from "features/teams/teamsSlice"
 import * as React from "react"
 import { Team, TeamType, TeamVisibility } from "src/models"
 import { fetchByPath, validateField } from "ui-components/utils"
@@ -124,7 +123,7 @@ export default function TeamUpdateForm(props: any) {
         Team.copyOf(teamRecord, (updated) => {
           Object.assign(updated, modelFields)
         })
-      ).then(() => fetchTeams())
+      )
 
       if (onSuccess) {
         onSuccess(modelFields)

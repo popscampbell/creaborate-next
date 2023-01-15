@@ -1,10 +1,12 @@
 import { Flex, Text, useAuthenticator, useTheme } from "@aws-amplify/ui-react"
+import { useAppSelector } from "app/hooks"
 import Link from "next/link"
 
 export default function AppBar() {
   const { tokens } = useTheme()
 
   const { user } = useAuthenticator()
+  const data = useAppSelector(state => state)
 
   return (
     <Flex
@@ -22,7 +24,8 @@ export default function AppBar() {
         </Text>
       </Flex>
 
-      <Flex grow={1} justifyContent="center"></Flex>
+      <Flex grow={1} justifyContent="center">
+      </Flex>
 
       <Flex
         justifyContent="flex-end"

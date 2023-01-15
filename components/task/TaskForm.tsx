@@ -1,26 +1,42 @@
-import { Flex, Radio, RadioGroupField, TextAreaField, TextField, useTheme } from "@aws-amplify/ui-react"
+import { Autocomplete, Flex, Radio, RadioGroupField, TextAreaField, TextField, useTheme } from "@aws-amplify/ui-react"
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers"
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import React from "react"
 import { TaskPriority, TaskStatus } from "src/models"
+import MuiTextField from '@mui/material/TextField'
+import { useAppSelector } from "app/hooks"
 
 export interface TaskFormInputs {
   name: string
   status: TaskStatus
   priority: TaskPriority
   description?: string
+  dueDate?: string
+  startDate?: string
+  ownerUsername?: string
+  completedByUsername?: string
+  completedDate?: string
 }
 
 export default function TaskForm(props: {
   inputs: TaskFormInputs
   onChange: (inputs: TaskFormInputs) => void
+  teamID: string
 }) {
-  const { inputs, onChange } = props
+  const { inputs, onChange, teamID } = props
 
   const { tokens } = useTheme()
+  const teamMembers = useAppSelector(state => state.team.members)
 
   const [name, setName] = React.useState(inputs.name)
   const [status, setStatus] = React.useState(inputs.status)
   const [priority, setPriority]= React.useState(inputs.priority)
   const [description, setDescription] = React.useState(inputs.description)
+  const [dueDate, setDueDate] = React.useState(inputs.dueDate)
+  const [startDate, setStartDate] = React.useState(inputs.startDate)
+  const [ownerUsername, setOwnerUsername] = React.useState(inputs.ownerUsername)
+  const [completedByUsername, setCompletedByUsername] = React.useState(inputs.completedByUsername)
+  const [completedDate, setCompletedDate] = React.useState(inputs.completedDate)
 
   return (
     <Flex as="form" direction="column">
@@ -33,7 +49,13 @@ export default function TaskForm(props: {
           onChange({
             name: e.target.value,
             status,
-            priority
+            priority,
+            description,
+            dueDate,
+            startDate,
+            ownerUsername,
+            completedByUsername,
+            completedDate,
           })
         }}
       />
@@ -46,9 +68,14 @@ export default function TaskForm(props: {
           setDescription(e.target.value)
           onChange({
             name,
-            description: e.target.value,
             status,
-            priority
+            priority,
+            description: e.target.value,
+            dueDate,
+            startDate,
+            ownerUsername,
+            completedByUsername,
+            completedDate,
           })
         }}
       />
@@ -63,6 +90,12 @@ export default function TaskForm(props: {
             name,
             status: e.target.value as TaskStatus,
             priority,
+            description,
+            dueDate,
+            startDate,
+            ownerUsername,
+            completedByUsername,
+            completedDate,
           })
         }}>
         <Radio value={TaskStatus.ACTIVE}>Active</Radio>
@@ -80,12 +113,64 @@ export default function TaskForm(props: {
             name,
             status,
             priority: e.target.value as TaskPriority,
+            description,
+            dueDate,
+            startDate,
+            ownerUsername,
+            completedByUsername,
+            completedDate,
           })
         }}>
         <Radio value={TaskPriority.HIGH}>High</Radio>
         <Radio value={TaskPriority.MEDIUM}>Medium</Radio>
         <Radio value={TaskPriority.LOW}>Low</Radio>
       </RadioGroupField>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Due"
+          value={dueDate}
+          onChange={(newValue) => {
+            setDueDate(newValue ?? undefined);
+          }}
+          renderInput={(params) => <MuiTextField {...params} />}
+        />
+      </LocalizationProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Started"
+          value={startDate}
+          onChange={(newValue) => {
+            setStartDate(newValue ?? undefined);
+          }}
+          renderInput={(params) => <MuiTextField {...params} />}
+        />
+      </LocalizationProvider>
+      <Autocomplete
+        label="Owner"
+        options={teamMembers?.map(tm => ({ id: tm.username, label: tm.name })) ?? []}
+        value={ownerUsername}
+        onChange={e => {
+          setOwnerUsername(e.target.value)
+        }}
+      />
+      <Autocomplete
+        label="Completed by"
+        options={teamMembers?.map(tm => ({ id: tm.username, label: tm.name })) ?? []}
+        value={completedByUsername}
+        onChange={e => {
+          setCompletedByUsername(e.target.value)
+        }}
+      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Completed on"
+          value={completedDate}
+          onChange={(newValue) => {
+            setCompletedDate(newValue ?? undefined);
+          }}
+          renderInput={(params) => <MuiTextField {...params} />}
+        />
+      </LocalizationProvider>
     </Flex>
   )
 }

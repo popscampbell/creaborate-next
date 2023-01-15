@@ -5,12 +5,12 @@ import {
   Collection,
   ComboBoxOption,
   Divider,
-  Flex,
-  Loader,
+  Flex, Placeholder,
   Text,
   useTheme
 } from "@aws-amplify/ui-react"
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, SnackbarProps } from "@mui/material"
+import { useAppSelector } from "app/hooks"
 import { DataStore } from "aws-amplify"
 import Layout from "components/Layout"
 import Page from "components/Page"
@@ -21,33 +21,66 @@ import TasksTable from "components/task/TasksTable"
 import TeamMemberForm from "components/team/TeamMemberForm"
 import TeamMemberPill from "components/team/TeamMemberPill"
 import TeamUpdateForm from "components/team/TeamUpdateForm"
-import useCurrentUserTeamRole from "hooks/useCurrentUserTeamRole"
-import useTeam from "hooks/useTeam"
-import { TeamMemberWithName, useTeamMembersByTeam } from "hooks/useTeamMembers"
+import { TeamMemberWithName } from "features/teams/teamSlice"
+import { TeamWithUserRole } from "features/user/userSlice"
 import _ from "lodash"
-import Head from "next/head"
 import { useRouter } from "next/router"
 import React from "react"
 import { MdAdd, MdSettings } from "react-icons/md"
-import { Team, TeamMember, TeamMemberRole } from "src/models"
+import { Task, Team, TeamMember, TeamMemberRole } from "src/models"
 
 export default function TeamPage() {
   const { tokens } = useTheme()
   const router = useRouter()
-  const { teamId } = router.query
-  const team = useTeam(teamId as string, true)
-  const role = useCurrentUserTeamRole(teamId as string)
+
+  const { teamID } = router.query as { teamID: string }
+
+  const teamState = useAppSelector((state) => state.team)
+  const {team} = teamState
 
   const [showForm, setShowForm] = React.useState(false)
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [snackbarState, setSnackbarState] = React.useState<SnackbarProps>({ open: false, message: ""})
+
+  function TeamPageBody() {
+    return (
+      <Page title={team?.name} context="Team">
+        {team ? (
+          <>
+            <PageHeader
+              title={team.name || ""}
+              subtitle={team.description}
+              actions={
+                <ButtonGroup>
+                  <Button onClick={handleSettingsClick}>
+                    <MdSettings />
+                  </Button>
+                </ButtonGroup>
+              }
+            />
+            {showForm && (
+              <TeamUpdateForm
+                team={team}
+                onSuccess={handleUpdateSuccess}
+                onCancel={handleCancel}
+              />
+            )}
+            <Divider />
+            <TeamMembersSection team={team} />
+            <Divider />
+            <TasksSection team={team} />
+          </>
+        ) : <Placeholder />}
+      </Page>
+    )
+  }
 
   function handleSettingsClick() {
     setShowForm(true)
   }
 
   function handleSnackbarClose() {
-    setSnackbarState({ open: false, message: ""})
+    setSnackbarState({ open: false, message: "" })
   }
 
   function handleUpdateSuccess() {
@@ -59,10 +92,10 @@ export default function TeamPage() {
     setShowForm(false)
   }
 
-  function TeamMembersSection(props: { team: Team }) {
+  function TeamMembersSection(props: { team: TeamWithUserRole }) {
     const { team } = props
 
-    const teamMembers = useTeamMembersByTeam(team)
+    const teamMembers = useAppSelector(state => state.team.members)
 
     function handleDismissTeamMember(teamMember: TeamMemberWithName) {
       if (teamMember.role !== TeamMemberRole.ADMINISTRATOR) {
@@ -89,16 +122,17 @@ export default function TeamPage() {
           wrap="wrap"
           marginBottom={tokens.space.medium}
         >
-          {(item) => (
+          {(teamMember) => (
             <TeamMemberPill
-              teamMember={item}
-              isDismissable={role === TeamMemberRole.ADMINISTRATOR && item.role !== TeamMemberRole.ADMINISTRATOR}
+              key={teamMember.username}
+              teamMember={teamMember}
+              isDismissable={team.role === TeamMemberRole.ADMINISTRATOR && teamMember.role !== TeamMemberRole.ADMINISTRATOR}
               onDismiss={handleDismissTeamMember} />
           )}
         </Collection>}
         <TeamMemberDialog onAdd={handleAddUsers}/>
       </PageSection>
-    ) : <Loader/>
+    ) : <Placeholder/>
   }
 
   function TeamMemberDialog(props: {
@@ -173,7 +207,7 @@ export default function TeamPage() {
     }
   }
 
-  function TasksSection(props: { team: Team }) {
+  function TasksSection(props: { team: TeamWithUserRole }) {
     const { team } = props
 
     const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -191,6 +225,10 @@ export default function TeamPage() {
       setSnackbarState({ open: true, message: "Task created"})
     }
 
+    function handleTaskSaved(task: Task) {
+      setSnackbarState({ open: true, message: "Saved"})
+    }
+
     return (
       <PageSection heading="Tasks" marginTop={24}
         actions={<ButtonGroup>
@@ -198,49 +236,18 @@ export default function TeamPage() {
             <MdAdd />
           </Button>
         </ButtonGroup>}>
-        <TasksTable teamId={team.id} />
+        <TasksTable onTaskSaved={handleTaskSaved} />
         <NewTaskDialog teamID={team.id} open={dialogOpen} onSaved={handleDialogSaved} onCancel={handleDialogCancel} />
       </PageSection>
     )
   }
 
-  return team? (
-    <>
-      <Head>
-        <title>Creaborate - {team?.name}</title>
-      </Head>
-      <Layout>
-        <Page>
-          <PageHeader
-            title={team?.name || ""}
-            subtitle={team?.description}
-            actions={
-              <ButtonGroup>
-                <Button onClick={handleSettingsClick}>
-                  <MdSettings />
-                </Button>
-              </ButtonGroup>
-            }
-          ></PageHeader>
-
-          {showForm && (
-            <TeamUpdateForm
-              team={team}
-              onSuccess={handleUpdateSuccess}
-              onCancel={handleCancel}
-            />
-          )}
-
-          <Divider />
-          <TeamMembersSection team={team} />
-          <Divider />
-          <TasksSection team={team} />
-        </Page>
-
+  return (
+      <Layout teamID={teamID}>
+        <TeamPageBody/>
         <Snackbar open={snackbarState.open} anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={6000} onClose={handleSnackbarClose}>
           <Alert isDismissible onDismiss={handleSnackbarClose} variation="success">Saved</Alert>
         </Snackbar>
       </Layout>
-    </>
-  ) : <Loader/>
+  )
 }

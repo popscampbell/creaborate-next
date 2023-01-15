@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit"
-import teamsReducer, { fetchTeams } from "features/teams/teamsSlice"
+import contextReducer from "features/contextSlice"
+import teamReducer from "features/teams/teamSlice"
+import userReducer from "features/user/userSlice"
 
 const store = {
   ...configureStore({
     reducer: {
-      teams: teamsReducer
+      context: contextReducer,
+      user: userReducer,
+      team: teamReducer,
     },
     middleware: function (getDefaultMiddleware) {
       return getDefaultMiddleware({
@@ -12,10 +16,6 @@ const store = {
       })
     },
   }),
-  ...{
-    loadData: () => fetchTeams(),
-    fetchTeams,
-  }
 }
 
 export default store
